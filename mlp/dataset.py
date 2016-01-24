@@ -212,12 +212,12 @@ class ACLDataProvider(DataProvider):
                   "a deprecead 'max_num_examples' arguments. We will " \
                   "use the former over the latter.")
 
-        dset_path = './data/ACL1_%s.pkl.gz' % dset
+        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%s.pkl.gz' % dset
         assert os.path.isfile(dset_path), (
             "File %s was expected to exist!." % dset_path
         )
 
-        with open(dset_path) as f:
+        with gzip.open(dset_path) as f:
             x, t = cPickle.load(f)
 
         self._max_num_batches = max_num_batches
