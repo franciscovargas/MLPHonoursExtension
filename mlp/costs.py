@@ -62,3 +62,23 @@ class CECost(Cost):
 
     def get_name(self):
         return 'ce'
+
+
+class CECostIm(Cost):
+    """
+    Cross Entropy (Negative log-likelihood) cost for multiple classes
+    And complex weights
+    """
+    def cost(self, y, t, **kwargs):
+        #assumes t is 1-of-K coded and y is a softmax
+        #transformed estimate at the output layer
+        nll = t * numpy.log(numpy.abs(y) )
+        return -numpy.mean(numpy.sum(nll, axis=1))
+
+    def grad(self, y, t, **kwargs):
+        #assumes t is 1-of-K coded and y is a softmax
+        #transformed estimate at the output layer
+        return y - t
+
+    def get_name(self):
+        return 'ceim'

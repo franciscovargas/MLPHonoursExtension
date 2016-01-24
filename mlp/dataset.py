@@ -195,7 +195,7 @@ class ACLDataProvider(DataProvider):
                  rng=None,
                  conv_reshape=False):
 
-        super(MNISTDataProvider, self).\
+        super(ACLDataProvider, self).\
             __init__(batch_size, randomize, rng)
 
         assert dset in ['train', 'valid', 'eval'], (
@@ -212,13 +212,14 @@ class ACLDataProvider(DataProvider):
                   "a deprecead 'max_num_examples' arguments. We will " \
                   "use the former over the latter.")
 
-        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%s.pkl.gz' % dset
+        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%sr.pkl.gz' % dset
         assert os.path.isfile(dset_path), (
             "File %s was expected to exist!." % dset_path
         )
 
         with gzip.open(dset_path) as f:
             x, t = cPickle.load(f)
+            print x.shape , t.shape
 
         self._max_num_batches = max_num_batches
         #max_num_examples arg was provided for backward compatibility
@@ -227,8 +228,8 @@ class ACLDataProvider(DataProvider):
             self._max_num_batches = max_num_examples / self.batch_size
 
         self.x = x
-        self.t = t
-        self.num_classes = 10
+        self.t = t -1
+        self.num_classes = 19
         self.conv_reshape = conv_reshape
 
         self._rand_idx = None
@@ -236,7 +237,7 @@ class ACLDataProvider(DataProvider):
             self._rand_idx = self.__randomize()
 
     def reset(self):
-        super(MNISTDataProvider, self).reset()
+        super(ACLDataProvider, self).reset()
         if self.randomize:
             self._rand_idx = self.__randomize()
 
@@ -286,6 +287,7 @@ class ACLDataProvider(DataProvider):
 
     def __to_one_of_k(self, y):
         rval = numpy.zeros((y.shape[0], self.num_classes), dtype=numpy.float32)
+        #print rval, y, self.num_classes
         for i in xrange(y.shape[0]):
             rval[i, y[i]] = 1
         return rval
