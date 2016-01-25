@@ -585,17 +585,6 @@ class DFTLinear(Layer):
         self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
 
     def fprop(self, inputs):
-        """
-        Implements a forward propagation through the i-th layer, that is
-        some form of:
-           a^i = xW^i + b^i
-           h^i = f^i(a^i)
-        with f^i, W^i, b^i denoting a non-linearity, weight matrix and
-        biases of this (i-th) layer, respectively and x denoting inputs.
-
-        :param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
-        :return: h^i, matrix of transformed by layer features
-        """
 
         #input comes from 4D convolutional tensor, reshape to expected shape
         if inputs.ndim == 4:
@@ -671,24 +660,13 @@ class ComplexLinear(Layer):
         self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
 
     def fprop(self, inputs):
-        """
-        Implements a forward propagation through the i-th layer, that is
-        some form of:
-           a^i = xW^i + b^i
-           h^i = f^i(a^i)
-        with f^i, W^i, b^i denoting a non-linearity, weight matrix and
-        biases of this (i-th) layer, respectively and x denoting inputs.
 
-        :param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
-        :return: h^i, matrix of transformed by layer features
-        """
 
         #input comes from 4D convolutional tensor, reshape to expected shape
-        if inputs.ndim == 4:
-            inputs = inputs.reshape(inputs.shape[0], -1)
-
         a_old = numpy.dot(inputs, self.W)
-        a = numpy.real(numpy.conj(a_old)*a_old) + self.b
+        a1 = numpy.real(a_old) + self.b
+        a2 = numpy.real(a_old) + self.b
+        a = numpy.concatenate((a1,a2), axis=1)
         # a = a_old + self.b
         # here f() is an identity function, so just return a linear transformation
         return a
@@ -715,7 +693,8 @@ class ComplexLinear(Layer):
                                 igrads.shape[1] / 2)
         ir = igrads[:, ::2,:]
         ii = igrads[:, 1::2,:]
-        ograds = numpy.dot(igrads, self.W.T)
+        tot = ir + 1j*ii
+        ograds = numpy.dot(tot, self.W.T)
         return igrads, ograds
 
     def bprop_cost(self, h, igrads, cost):
@@ -745,22 +724,7 @@ class ComplexLinear(Layer):
                                       'for the %s cost' % cost.get_name())
 
     def pgrads(self, inputs, deltas, l1_weight=0, l2_weight=0):
-        """
-        Return gradients w.r.t parameters
 
-        :param inputs, input to the i-th layer
-        :param deltas, deltas computed in bprop stage up to -ith layer
-        :param kwargs, key-value optional arguments
-        :return list of grads w.r.t parameters dE/dW and dE/db in *exactly*
-                the same order as the params are returned by get_params()
-
-        Note: deltas here contain the whole chain rule leading
-        from the cost up to the the i-th layer, i.e.
-        dE/dy^L dy^L/da^L da^L/dh^{L-1} dh^{L-1}/da^{L-1} ... dh^{i}/da^{i}
-        and here we are just asking about
-          1) da^i/dW^i and 2) da^i/db^i
-        since W and b are only layer's parameters
-        """
 
         #input comes from 4D convolutional tensor, reshape to expected shape
         if inputs.ndim == 4:
@@ -781,14 +745,20 @@ class ComplexLinear(Layer):
         term1 = numpy.dot(inputs, self.W)
         term2 = numpy.conj(term1)
 
+        ir = deltas[:, ::2,:]
+        ii = deltas[:, 1::2,:]
+        deltas = ir + 1j*ii
+        deltas = deltas.reshape(100,-1)
+        # print deltas.shape
+
         grad_W_term1 = numpy.dot(inputs.T, deltas*term2)
         grad_W_term2 = numpy.dot(numpy.conj(inputs).T, deltas*term1)
 
 
-        grad_W = numpy.zeros((self.idim, self.odim))
-        # grad_W = grad_W_term1 + grad_W_term2  + l2_W_penalty + l1_W_penalty
-        # grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
-        grad_b = 0
+        # grad_W = numpy.zeros((self.idim, self.odim))
+        grad_W = grad_W_term1 + grad_W_term2  + l2_W_penalty + l1_W_penalty
+        grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
+        # grad_b = 0
         # print grad_W
         # plt.matshow(numpy.imag(self.W))
         # plt.show()
