@@ -227,7 +227,8 @@ class ACLDataProvider(DataProvider):
         if max_num_examples > 0 and max_num_batches < 0:
             self._max_num_batches = max_num_examples / self.batch_size
 
-        self.x = x
+        self.x = x[:,:125]
+        print self.x.shape
         self.t = t -1
         self.num_classes = 19
         self.conv_reshape = conv_reshape

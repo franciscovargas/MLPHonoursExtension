@@ -5,6 +5,8 @@
 import numpy
 import logging
 from mlp.costs import Cost
+import matplotlib.pyplot as plt
+from scipy.linalg import dft
 
 
 logger = logging.getLogger(__name__)
@@ -562,20 +564,23 @@ class Maxout(Linear):
 
 
 
-class ComplexLinear(Layer):
+class DFTLinear(Layer):
 
     def __init__(self, idim, odim,
                  rng=None,
                  irange=0.1):
 
-        super(Linear, self).__init__(rng=rng)
+        super(DFTLinear, self).__init__(rng=rng)
 
         self.idim = idim
         self.odim = odim
+        # must be true for fourier layer
+        assert idim == odim
 
-        self.W = self.rng.uniform(
-            -irange, irange,
-            (self.idim, self.odim))
+        self.W = dft(odim).T
+        self.Wr = numpy.real(self.W)
+        self.Wi = numpy.imag(self.W)
+
 
         self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
 
@@ -596,7 +601,95 @@ class ComplexLinear(Layer):
         if inputs.ndim == 4:
             inputs = inputs.reshape(inputs.shape[0], -1)
 
-        a = numpy.abs(numpy.dot(inputs, self.W))**2 + self.b
+        a_old = numpy.dot(inputs, self.W)
+        a1 = numpy.real(a_old) + self.b
+        a2 = numpy.real(a_old) + self.b
+        a = numpy.concatenate((a1,a2), axis=1)
+        # a = a_old + self.b
+        # here f() is an identity function, so just return a linear transformation
+        return a
+
+    def bprop(self, h, igrads):
+
+        ograds = 0
+        return igrads, ograds
+
+    def bprop_cost(self, h, igrads, cost):
+
+
+        if cost is None or cost.get_name() == 'mse':
+            # for linear layer and mean square error cost,
+            # cost back-prop is the same as standard back-prop
+            return self.bprop(h, igrads)
+        else:
+            raise NotImplementedError('Linear.bprop_cost method not implemented '
+                                      'for the %s cost' % cost.get_name())
+
+    def pgrads(self, inputs, deltas, l1_weight=0, l2_weight=0):
+
+        grad_W = 0
+        grad_b = 0
+
+        # plt.imshow(numpy.imag(self.W))
+        # plt.show()
+        # plt.imshow(numpy.real(self.W))
+        # plt.show()
+        return [grad_W, grad_b]
+
+    def get_params(self):
+        return [self.W, self.b]
+
+    def set_params(self, params):
+        #we do not make checks here, but the order on the list
+        #is assumed to be exactly the same as get_params() returns
+        self.W = params[0]
+        self.b = params[1]
+
+    def get_name(self):
+        return 'clinear'
+
+
+
+
+class ComplexLinear(Layer):
+
+    def __init__(self, idim, odim,
+                 rng=None,
+                 irange=0.1):
+
+        super(ComplexLinear, self).__init__(rng=rng)
+
+        self.idim = idim
+        self.odim = odim
+        # must be true for fourier layer
+        assert idim == odim
+
+        self.W = dft(odim)
+        self.Wr = numpy.real(self.W)
+        self.Wi = numpy.imag(self.W)
+
+        self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
+
+    def fprop(self, inputs):
+        """
+        Implements a forward propagation through the i-th layer, that is
+        some form of:
+           a^i = xW^i + b^i
+           h^i = f^i(a^i)
+        with f^i, W^i, b^i denoting a non-linearity, weight matrix and
+        biases of this (i-th) layer, respectively and x denoting inputs.
+
+        :param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
+        :return: h^i, matrix of transformed by layer features
+        """
+
+        #input comes from 4D convolutional tensor, reshape to expected shape
+        if inputs.ndim == 4:
+            inputs = inputs.reshape(inputs.shape[0], -1)
+
+        a_old = numpy.dot(inputs, self.W)
+        a = numpy.real(numpy.conj(a_old)*a_old) + self.b
+        # a = a_old + self.b
         # here f() is an identity function, so just return a linear transformation
         return a
 
@@ -618,6 +711,10 @@ class ComplexLinear(Layer):
 
         # since df^i/da^i = 1 (f is assumed identity function),
         # deltas are in fact the same as igrads
+        igrads = igrads.reshape(igrads.shape[0],2,
+                                igrads.shape[1] / 2)
+        ir = igrads[:, ::2,:]
+        ii = igrads[:, 1::2,:]
         ograds = numpy.dot(igrads, self.W.T)
         return igrads, ograds
 
@@ -687,9 +784,14 @@ class ComplexLinear(Layer):
         grad_W_term1 = numpy.dot(inputs.T, deltas*term2)
         grad_W_term2 = numpy.dot(numpy.conj(inputs).T, deltas*term1)
 
-        grad_W = grad_W_term1 + grad_W_term2 + l2_W_penalty + l1_W_penalty
-        grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
 
+        grad_W = numpy.zeros((self.idim, self.odim))
+        # grad_W = grad_W_term1 + grad_W_term2  + l2_W_penalty + l1_W_penalty
+        # grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
+        grad_b = 0
+        # print grad_W
+        # plt.matshow(numpy.imag(self.W))
+        # plt.show()
         return [grad_W, grad_b]
 
     def get_params(self):
@@ -702,4 +804,41 @@ class ComplexLinear(Layer):
         self.b = params[1]
 
     def get_name(self):
-        return 'linear'
+        return 'clinear'
+
+
+class ComplexSigmoid(ComplexLinear):
+    def __init__(self,  idim, odim,
+                 rng=None,
+                 irange=0.1):
+
+        super(ComplexSigmoid, self).__init__(idim, odim, rng, irange)
+
+    def fprop(self, inputs):
+        #get the linear activations
+        a = super(ComplexSigmoid, self).fprop(inputs)
+        #stabilise the exp() computation in case some values in
+        #'a' get very negative. We limit both tails, however only
+        #negative values may lead to numerical issues -- exp(-a)
+        #clip() function does the following operation faster:
+        # a[a < -30.] = -30,
+        # a[a > 30.] = 30.
+        numpy.clip(a, -30.0, 30.0, out=a)
+        h = 1.0/(1 + numpy.exp(-a))
+        return h
+
+    def bprop(self, h, igrads):
+        dsigm = h * (1.0 - h)
+        deltas = igrads * dsigm
+        ___, ograds = super(ComplexSigmoid, self).bprop(h=None, igrads=deltas)
+        return deltas, ograds
+
+    def bprop_cost(self, h, igrads, cost):
+        if cost is None or cost.get_name() == 'bce':
+            return super(ComplexSigmoid, self).bprop(h=h, igrads=igrads)
+        else:
+            raise NotImplementedError('Sigmoid.bprop_cost method not implemented '
+                                      'for the %s cost' % cost.get_name())
+
+    def get_name(self):
+        return 'sigmoid'
