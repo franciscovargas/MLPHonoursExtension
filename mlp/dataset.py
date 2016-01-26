@@ -212,7 +212,7 @@ class ACLDataProvider(DataProvider):
                   "a deprecead 'max_num_examples' arguments. We will " \
                   "use the former over the latter.")
 
-        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%sr.pkl.gz' % dset
+        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%sa.pkl.gz' % dset
         assert os.path.isfile(dset_path), (
             "File %s was expected to exist!." % dset_path
         )
@@ -227,7 +227,7 @@ class ACLDataProvider(DataProvider):
         if max_num_examples > 0 and max_num_batches < 0:
             self._max_num_batches = max_num_examples / self.batch_size
 
-        self.x = x[:,:125]
+        self.x = x[:,125*11*3:125*11*3 +125]
         print self.x.shape
         self.t = t -1
         self.num_classes = 19

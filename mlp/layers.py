@@ -367,6 +367,7 @@ class Linear(Layer):
         grad_W = numpy.dot(inputs.T, deltas) + l2_W_penalty + l1_W_penalty
         grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
 
+
         return [grad_W, grad_b]
 
     def get_params(self):
@@ -619,10 +620,6 @@ class DFTLinear(Layer):
         grad_W = 0
         grad_b = 0
 
-        # plt.imshow(numpy.imag(self.W))
-        # plt.show()
-        # plt.imshow(numpy.real(self.W))
-        # plt.show()
         return [grad_W, grad_b]
 
     def get_params(self):
@@ -635,9 +632,32 @@ class DFTLinear(Layer):
         self.b = params[1]
 
     def get_name(self):
-        return 'clinear'
+        return 'dftlinear'
 
 
+class DFTAugLinear(DFTLinear):
+
+    def __init__(self,  idim, odim,
+                 rng=None,
+                 irange=0.1):
+
+        super(DFTAugLinear, self).__init__(idim, odim, rng, irange)
+
+    def fprop(self, inputs):
+
+        if inputs.ndim == 4:
+            inputs = inputs.reshape(inputs.shape[0], -1)
+
+        a_old = numpy.dot(inputs, self.W)
+        a1 = numpy.real(a_old) + self.b
+        a2 = numpy.real(a_old) + self.b
+        a = numpy.concatenate((a1,a2,inputs), axis=1)
+
+        return a
+
+
+    def get_name(self):
+        return 'dftlinear'
 
 
 class ComplexLinear(Layer):
@@ -663,57 +683,26 @@ class ComplexLinear(Layer):
 
 
         #input comes from 4D convolutional tensor, reshape to expected shape
-        a_old = numpy.dot(inputs, self.W)
-        a1 = numpy.real(a_old) + self.b
-        a2 = numpy.real(a_old) + self.b
+        # a_old = numpy.dot(inputs, self.W)
+        a1 = numpy.dot(inputs, self.Wr) #+ self.b
+        a2 = numpy.dot(inputs, self.Wi) #+ self.b
         a = numpy.concatenate((a1,a2), axis=1)
         # a = a_old + self.b
         # here f() is an identity function, so just return a linear transformation
         return a
 
     def bprop(self, h, igrads):
-        """
-        Implements a backward propagation through the layer, that is, given
-        h^i denotes the output of the layer and x^i the input, we compute:
-        dh^i/dx^i which by chain rule is dh^i/da^i da^i/dx^i
-        x^i could be either features (x) or the output of the lower layer h^{i-1}
-        :param h: it's an activation produced in forward pass
-        :param igrads, error signal (or gradient) flowing to the layer, note,
-               this in general case does not corresponds to 'deltas' used to update
-               the layer's parameters, to get deltas ones need to multiply it with
-               the dh^i/da^i derivative
-        :return: a tuple (deltas, ograds) where:
-               deltas = igrads * dh^i/da^i
-               ograds = deltas \times da^i/dx^i
-        """
 
         # since df^i/da^i = 1 (f is assumed identity function),
         # deltas are in fact the same as igrads
         igrads = igrads.reshape(igrads.shape[0],2,
                                 igrads.shape[1] / 2)
-        ir = igrads[:, ::2,:]
-        ii = igrads[:, 1::2,:]
-        tot = ir + 1j*ii
-        ograds = numpy.dot(tot, self.W.T)
+        ir = numpy.dot(igrads[:, ::2,:], self.Wr.T)
+        ii = numpy.dot(igrads[:, 1::2,:], self.Wi.T)
+        ograds = numpy.concatenate((ir, ii), axis=1)
         return igrads, ograds
 
     def bprop_cost(self, h, igrads, cost):
-        """
-        Implements a backward propagation in case the layer directly
-        deals with the optimised cost (i.e. the top layer)
-        By default, method should implement a bprop for default cost, that is
-        the one that is natural to the layer's output, i.e.:
-        here we implement linear -> mse scenario
-        :param h: it's an activation produced in forward pass
-        :param igrads, error signal (or gradient) flowing to the layer, note,
-               this in general case does not corresponds to 'deltas' used to update
-               the layer's parameters, to get deltas ones need to multiply it with
-               the dh^i/da^i derivative
-        :param cost, mlp.costs.Cost instance defining the used cost
-        :return: a tuple (deltas, ograds) where:
-               deltas = igrads * dh^i/da^i
-               ograds = deltas \times da^i/dx^i
-        """
 
         if cost is None or cost.get_name() == 'mse':
             # for linear layer and mean square error cost,
@@ -742,36 +731,30 @@ class ComplexLinear(Layer):
             l1_W_penalty = l1_weight*numpy.sign(self.W)
             l1_b_penalty = l1_weight*numpy.sign(self.b)
 
-        term1 = numpy.dot(inputs, self.W)
-        term2 = numpy.conj(term1)
+        # term1 = numpy.dot(inputs, self.W)
+        # term2 = numpy.conj(term1)
 
-        ir = deltas[:, ::2,:]
-        ii = deltas[:, 1::2,:]
-        deltas = ir + 1j*ii
-        deltas = deltas.reshape(100,-1)
+        ir = deltas[:, ::2,:].reshape(100,-1)
+        ii = deltas[:, 1::2,:].reshape(100, -1)
+        # deltas = ir + 1j*ii
+        # deltas = deltas.reshape(100,-1)
         # print deltas.shape
 
-        grad_W_term1 = numpy.dot(inputs.T, deltas*term2)
-        grad_W_term2 = numpy.dot(numpy.conj(inputs).T, deltas*term1)
+        grad_Wr = numpy.dot(inputs.T, ir)
+        grad_Wi = numpy.dot(inputs.T, ii)
+        grad_b = numpy.sum(numpy.abs(deltas), axis=0) + l2_b_penalty + l1_b_penalty
 
-
-        # grad_W = numpy.zeros((self.idim, self.odim))
-        grad_W = grad_W_term1 + grad_W_term2  + l2_W_penalty + l1_W_penalty
-        grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
-        # grad_b = 0
-        # print grad_W
-        # plt.matshow(numpy.imag(self.W))
-        # plt.show()
-        return [grad_W, grad_b]
+        return [grad_Wr, grad_Wi, grad_b]
 
     def get_params(self):
-        return [self.W, self.b]
+        return [self.Wr, self.Wi, self.b]
 
     def set_params(self, params):
         #we do not make checks here, but the order on the list
         #is assumed to be exactly the same as get_params() returns
-        self.W = params[0]
-        self.b = params[1]
+        self.Wr = params[0]
+        self.Wi = params[1]
+        self.b = params[2]
 
     def get_name(self):
         return 'clinear'
