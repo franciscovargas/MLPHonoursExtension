@@ -1,6 +1,7 @@
 
 # Machine Learning Practical (INFR11119),
 # Pawel Swietojanski, University of Edinburgh
+from sklearn.preprocessing import normalize
 
 import numpy
 import logging
@@ -83,7 +84,7 @@ class MLP(object):
         else:
             self.rng = rng
 
-    def fprop(self, x):
+    def fprop(self, x, noise_up_layer=-1, noise_list= None, wrong=False):
         """
 
         :param inputs: mini-batch of data-points x
@@ -94,8 +95,25 @@ class MLP(object):
             self.activations = [None]*(len(self.layers) + 1)
 
         self.activations[0] = x
+        # print "layers: >>>>" + str(len(self.activations))
+        # print "layer len: ", len(self.layers)
+        # if noise_list is not None:
+        #     print "noise stack len: ", len(noise_list)
         for i in xrange(0, len(self.layers)):
+            # print "layer : " + str(i)
+            # print "odim : " + str(self.layers[i].odim)
+            # print "idim : " + str(self.layers[i].idim)
+            # print "activation : " + str(self.activations[i].shape)
             self.activations[i+1] = self.layers[i].fprop(self.activations[i])
+            if noise_up_layer != -1 and i < len(self.layers)  - 1:
+                # print "Layer: ", i
+                # nomn pythonic hack prepare your ...
+                # this is moribidly obese
+                if wrong:
+                    self.activations[i+1] *= noise_list[i]
+                # pass
+
+
         return self.activations[-1]
 
     def fprop_dropout(self, x, dp_scheduler):
@@ -255,7 +273,7 @@ class Linear(Layer):
 
         self.idim = idim
         self.odim = odim
-
+        self.irange = irange
         self.W = self.rng.uniform(
             -irange, irange,
             (self.idim, self.odim))
@@ -578,12 +596,34 @@ class DFTLinear(Layer):
         # must be true for fourier layer
         assert idim == odim
 
-        self.W = dft(odim).T
+        self.W = dft(odim)
         self.Wr = numpy.real(self.W)
         self.Wi = numpy.imag(self.W)
 
 
         self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
+
+    def norm_weights(self, train_iterator):
+        """
+        Normalize dft weights by E[(wx)^2]
+        """
+        n = 1
+        for inputs,t in train_iterator:
+            if n==1:
+                n1 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2) #+ self.b
+                n2 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
+                n += 1
+                continue
+            n1 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2) #+ self.b
+            n2 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
+            n += 1
+        n1 /= n
+        n2 /= n
+        self.Wr = self.Wr / numpy.mean(n1, axis=0)
+        n2m = numpy.mean(n2, axis=0)
+        n2m[n2m==0.0]=1.0
+        self.Wi = self.Wi / n2m
+
 
     def fprop(self, inputs):
 
@@ -673,26 +713,55 @@ class ComplexLinear(Layer):
         # must be true for fourier layer
         assert idim == odim
 
-        self.W = dft(odim)
+        # odim  is output and the input dimensions of the DFT layer
+        dft_mat = dft(odim)
+        # diag(M * M^{dagger}) gives me the normalization values for each row
+        # setting M = M^T does the trick for collumns
+        normalization_vals = numpy.diag((dft_mat.T).dot(numpy.conj(dft_mat.T)))
+        # This is the renormalized weight matrix from my understanding
+        self.W = dft_mat # / normalization_vals.reshape(-1,1)
+        # seperating in to two (outputing double number of neurons )
         self.Wr = numpy.real(self.W)
         self.Wi = numpy.imag(self.W)
 
-        self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
+        self.b = numpy.zeros((self.odim*2,), dtype=numpy.float32)
+
+    def norm_weights(self, train_iterator):
+        """
+        Normalize dft weights by E[(wx)^2]
+        """
+        n = 1
+        for inputs,t in train_iterator:
+            if n==1:
+                n1 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2) #+ self.b
+                n2 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
+                n += 1
+                continue
+            n1 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2) #+ self.b
+            n2 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
+            n += 1
+        n1 /= n
+        n2 /= n
+        self.Wr = self.Wr / numpy.mean(n1, axis=0)
+        n2m = numpy.mean(n2, axis=0)
+        n2m[n2m==0.0]=1.0
+        self.Wi = self.Wi / n2m
 
     def fprop(self, inputs):
 
 
         #input comes from 4D convolutional tensor, reshape to expected shape
         # a_old = numpy.dot(inputs, self.W)
+
         a1 = numpy.dot(inputs, self.Wr) #+ self.b
         a2 = numpy.dot(inputs, self.Wi) #+ self.b
         a = numpy.concatenate((a1,a2), axis=1)
         # a = a_old + self.b
         # here f() is an identity function, so just return a linear transformation
-        return a
+        return a + self.b
 
     def bprop(self, h, igrads):
-
+        # self.first = False
         # since df^i/da^i = 1 (f is assumed identity function),
         # deltas are in fact the same as igrads
         igrads = igrads.reshape(igrads.shape[0],2,
@@ -744,7 +813,7 @@ class ComplexLinear(Layer):
         grad_Wi = numpy.dot(inputs.T, ii)
         grad_b = numpy.sum(numpy.abs(deltas), axis=0) + l2_b_penalty + l1_b_penalty
 
-        return [grad_Wr, grad_Wi, grad_b]
+        return [grad_Wr, grad_Wi, grad_b.ravel()]
 
     def get_params(self):
         return [self.Wr, self.Wi, self.b]
