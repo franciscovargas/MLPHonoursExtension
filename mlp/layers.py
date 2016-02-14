@@ -1,4 +1,4 @@
-
+from scipy import signal
 # Machine Learning Practical (INFR11119),
 # Pawel Swietojanski, University of Edinburgh
 from sklearn.preprocessing import normalize
@@ -785,8 +785,8 @@ class ComplexLinear(Layer):
 
 
         #input comes from 4D convolutional tensor, reshape to expected shape
-        if inputs.ndim == 4:
-            inputs = inputs.reshape(inputs.shape[0], -1)
+        # if inputs.ndim == 4:
+        #     inputs = inputs.reshape(inputs.shape[0], -1)
 
         #you could basically use different scalers for biases
         #and weights, but it is not implemented here like this
@@ -802,7 +802,7 @@ class ComplexLinear(Layer):
 
         # term1 = numpy.dot(inputs, self.W)
         # term2 = numpy.conj(term1)
-
+        # print deltas.shape
         ir = deltas[:, ::2,:].reshape(100,-1)
         ii = deltas[:, 1::2,:].reshape(100, -1)
         # deltas = ir + 1j*ii
@@ -864,3 +864,151 @@ class ComplexSigmoid(ComplexLinear):
 
     def get_name(self):
         return 'sigmoid'
+
+
+class ComplexRelu(ComplexLinear):
+    def __init__(self,  idim, odim,
+                 rng=None,
+                 irange=0.1):
+
+        super(ComplexRelu, self).__init__(idim, odim, rng, irange)
+
+    def fprop(self, inputs):
+        #get the linear activations
+        a = super(ComplexRelu, self).fprop(inputs)
+        h = numpy.clip(a, 0, 20.0)
+        # h = numpy.maximum(a, 0)
+        return h
+
+    def bprop(self, h, igrads):
+        igrads = (h > 0)*igrads
+        igrads = igrads.reshape(igrads.shape[0],2,
+                                igrads.shape[1] / 2)
+        ir = numpy.dot(igrads[:, ::2,:], self.Wr.T)
+        ii = numpy.dot(igrads[:, 1::2,:], self.Wi.T)
+        ograds = numpy.concatenate((ir, ii), axis=1)
+        return igrads, ograds
+
+    def bprop_cost(self, h, igrads, cost):
+        raise NotImplementedError('Relu.bprop_cost method not implemented '
+                                      'for the %s cost' % cost.get_name())
+
+    def get_name(self):
+        return 'relu'
+
+
+class DFTPLinear(Layer):
+
+    def __init__(self, idim, odim,
+                 rng=None,
+                 irange=0.1):
+
+        super(DFTPLinear, self).__init__(rng=rng)
+
+        self.idim = idim
+        self.odim = odim
+        # must be true for fourier layer
+        assert idim == odim
+
+        self.W = dft(odim)
+        self.Wr = numpy.real(self.W)
+        self.Wi = numpy.imag(self.W)
+
+
+        self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
+
+    def norm_weights(self, train_iterator):
+        """
+        Normalize dft weights by E[(wx)^2]
+        """
+        n = 1
+        for inputs,t in train_iterator:
+            if n==1:
+                n1 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2) #+ self.b
+                n2 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
+                n += 1
+                continue
+            n1 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2) #+ self.b
+            n2 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
+            n += 1
+        n1 /= n
+        n2 /= n
+        self.Wr = self.Wr / numpy.mean(n1, axis=0)
+        n2m = numpy.mean(n2, axis=0)
+        n2m[n2m==0.0]=1.0
+        self.Wi = self.Wi / n2m
+
+
+    def fprop(self, inputs, phase = False):
+
+        #input comes from 4D convolutional tensor, reshape to expected shape
+        if inputs.ndim == 4:
+            inputs = inputs.reshape(inputs.shape[0], -1)
+
+        a_old = numpy.dot(inputs, self.W)
+
+        # a = a_old + self.b
+        # here f() is an identity function, so just return a linear transformation
+        if phase:
+            return numpy.concatenate((numpy.abs(a_old),
+                                     numpy.angle(a_old)),
+                                     axis=1)
+        else:
+            # print numpy.abs(a_old)**2
+            # return numpy.angle(a_old)
+            wind = signal.get_window('hamming', 7)
+            f, t , s =  signal. spectrogram(inputs,
+                                           nperseg=70,
+                                           noverlap=70 - 25,
+                                           axis=-1,
+                                           scaling='spectrum',
+                                           mode='magnitude')
+
+
+            # f, s =  signal. periodogram(inputs,
+            #                             axis=-1)
+
+            # print s.shape
+            flat = s.reshape(inputs.shape[0], -1)
+            # x= plt.pcolormesh(t, f, s[0])
+            # plt.ylabel('Frequency [Hz]')
+            # plt.xlabel('Time [sec]')
+            # plt.show()
+            # gsdfjgfjkgfsdjk
+            # print a_old.shape
+            # return numpy.abs(a_old)
+            return flat
+    def bprop(self, h, igrads):
+
+        ograds = 0
+        return igrads, ograds
+
+    def bprop_cost(self, h, igrads, cost):
+
+
+        if cost is None or cost.get_name() == 'mse':
+            # for linear layer and mean square error cost,
+            # cost back-prop is the same as standard back-prop
+            return self.bprop(h, igrads)
+        else:
+            raise NotImplementedError('Linear.bprop_cost method not implemented '
+                                      'for the %s cost' % cost.get_name())
+
+    def pgrads(self, inputs, deltas, l1_weight=0, l2_weight=0):
+
+        grad_W = 0
+        grad_b = 0
+
+        return [grad_W, grad_b]
+
+    def get_params(self):
+        return [self.W, self.b]
+
+    def set_params(self, params):
+        #we do not make checks here, but the order on the list
+        #is assumed to be exactly the same as get_params() returns
+        self.W = params[0]
+        self.b = params[1]
+
+    def get_name(self):
+        return 'dftplinear'
