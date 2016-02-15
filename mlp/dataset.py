@@ -181,6 +181,32 @@ class MNISTDataProvider(DataProvider):
             rval[i, y[i]] = 1
         return rval
 
+class ACLEnum(object):
+    # http://archive.ics.uci.edu/ml/datasets/Daily+and+Sports+Activities
+    # *3 is the z axis, no 11 is y-axis *3 I dont know
+    #  3 ???????? 
+    # Accelerometer dic (I hope... ffs)
+    dic = {
+            'LHAx': (18*125, 18*125 + 125),
+            'LLAx': (36*125, 36*125 + 125),
+            'RHAx': (125*9, 125*9 + 125),
+            'RLAx': (27*125, 287*125 + 125),
+            'CAx' : (125*0, 125*0 + 125),
+            'LHAy': (19*125, 19*125 + 125),
+            'LLAy': (37*125, 37*125 + 125),
+            'RHAy': (125*10, 125*10 + 125),
+            'RLAy': (28*125, 28*125 + 125),
+            'CAy' : (125*1, 125*1 + 125),
+            'LHAz': (20*125, 20*125 + 125),
+            'LLAz': (38*125, 38*125 + 125),
+            'RHAz': (125*11, 125*11 + 125),
+            'RLAz': (29*125, 29*125 + 125),
+            'CAz' : (125*2, 125*2 + 125),
+            
+    }
+
+    def __init__(self, name='RHAy'):
+        s, e = self.dic[name]
 
 class ACLDataProvider(DataProvider):
     """
@@ -193,7 +219,7 @@ class ACLDataProvider(DataProvider):
                  max_num_examples=-1,
                  randomize=True,
                  rng=None,
-                 conv_reshape=False):
+                 conv_reshape=False,name='RHAy'):
 
         super(ACLDataProvider, self).\
             __init__(batch_size, randomize, rng)
@@ -226,8 +252,8 @@ class ACLDataProvider(DataProvider):
         #but it maps us to the max_num_batches anyway
         if max_num_examples > 0 and max_num_batches < 0:
             self._max_num_batches = max_num_examples / self.batch_size
-
-        self.x = x[:,125*11*3:125*11*3 +125]
+        enum = ACLEnum(name)
+        self.x = x[:,enum.s:enum.e]
         print self.x.shape
         self.t = t -1
         self.num_classes = 19
