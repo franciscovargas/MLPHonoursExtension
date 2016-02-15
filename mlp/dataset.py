@@ -206,7 +206,7 @@ class ACLEnum(object):
     }
 
     def __init__(self, name='RHAy'):
-        s, e = self.dic[name]
+        self.s, self.e = self.dic[name]
 
 class ACLDataProvider(DataProvider):
     """
