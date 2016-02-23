@@ -196,6 +196,9 @@ class MLP(object):
     def get_name(self):
         return 'mlp'
 
+    def remove_top_layer(self):
+        self.layers.pop(-1)
+
 
 class Layer(object):
 
@@ -309,7 +312,7 @@ class Linear(Layer):
         """
 
         # input comes from 4D convolutional tensor, reshape to expected shape
-        if inputs.ndim == 4:
+        if inputs.ndim >2:
             inputs = inputs.reshape(inputs.shape[0], -1)
 
         a = numpy.dot(inputs, self.W) + self.b
@@ -383,7 +386,7 @@ class Linear(Layer):
         """
 
         # input comes from 4D convolutional tensor, reshape to expected shape
-        if inputs.ndim == 4:
+        if inputs.ndim > 2:
             inputs = inputs.reshape(inputs.shape[0], -1)
 
         # you could basically use different scalers for biases

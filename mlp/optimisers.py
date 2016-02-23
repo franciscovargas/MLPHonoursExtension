@@ -9,10 +9,10 @@ import numpy as np
 from scipy.fftpack import fft
 
 from mlp.layers import MLP
-from mlp.layers import Sigmoid
+from mlp.layers import Sigmoid, Linear
 from mlp.dataset import DataProvider
 from mlp.schedulers import LearningRateScheduler
-from mlp.costs import  *
+from mlp.costs import *
 from copy import copy, deepcopy
 
 
@@ -139,8 +139,16 @@ class SGDOptimiser(Optimiser):
                                                deltas=model.deltas[i + 1],
                                                l1_weight=self.l1_weight,
                                                l2_weight=self.l2_weight)
+                # print "88888888888888"
+                # print model.layers[i].get_name()
+                # print grads[0].shape
+                # print grads[1].shape
+                # print params[0].shape
+                # print "999999999999999999"
                 uparams = []
                 for param, grad in zip(params, grads):
+                    # print grad.shape
+                    # print param.shape
                     param = param - effective_learning_rate * grad
                     uparams.append(param)
                 model.layers[i].set_params(uparams)
@@ -152,7 +160,7 @@ class SGDOptimiser(Optimiser):
 
         for i in xrange(0, len(model.layers)):
             if (model.layers[i].get_name() != 'clinear'
-                and model.layers[i].get_name() != 'dftlinear'):
+                    and model.layers[i].get_name() != 'dftlinear'):
                 if i == 1:
                     # plt.matshow(model.layers[i].W)
                     # plt.draw()
@@ -229,9 +237,9 @@ class SGDOptimiser(Optimiser):
             vstop = time.clock()
 
             train_speed = train_iterator.num_examples_presented() / \
-                                                                (tstop - tstart)
+                (tstop - tstart)
             valid_speed = valid_iterator.num_examples_presented() / \
-                                                                (vstop - vstart)
+                (vstop - vstart)
             tot_time = vstop - tstart
             logger.info("Epoch %i: Took %.0f seconds. Training speed %.0f pps. "
                         "Validation speed %.0f pps."
@@ -269,10 +277,9 @@ class SGDOptimiser(Optimiser):
             tp.append(model.fprop(x))
         return zip(xp, tp)
 
-
     def pretrain_epoch(self, model, train_iterator,
-                      learning_rate, fprop_list, to_layer=0,
-                      final=False, noise_up_layer=-1, noise=False):
+                       learning_rate, fprop_list, to_layer=0,
+                       final=False, noise_up_layer=-1, noise=False):
 
         assert isinstance(model, MLP), (
             "Expected model to be a subclass of 'mlp.layers.MLP'"
@@ -311,7 +318,7 @@ class SGDOptimiser(Optimiser):
             cost_grad = model.cost.grad(y, t2)
 
             # do backward pass through the model
-            model.bprop(cost_grad, self.dp_scheduler, to_layer=to_layer)
+            model.bprop(cost_grad, self.dp_scheduler)
 
             # update the model, here we iterate over layers
             # and then over each parameter in the layer
@@ -369,7 +376,7 @@ class SGDOptimiser(Optimiser):
 
         model_out.add_layer(init_layer)
         output_layer = Linear(
-            idim=init_layer.odim, odim=784, rng=init_layer.rng)
+            idim=init_layer.odim, odim=125, rng=init_layer.rng)
 
         model_out.add_layer(output_layer)
 
@@ -379,17 +386,17 @@ class SGDOptimiser(Optimiser):
         tr_nll, tr_acc = self.validate(
             model_out, train_iterator_tmp, self.l1_weight, self.l2_weight)
         logger.info('Epoch %i: PreTraining cost (%s) for initial model is %.3f. Accuracy is %.2f%%'
-                   % (self.lr_scheduler.epoch, cost_name, tr_nll, tr_acc * 100.))
+                    % (self.lr_scheduler.epoch, cost_name, tr_nll, tr_acc * 100.))
         tr_stats.append((tr_nll, tr_acc))
 
         if valid_iterator is not None:
-           valid_iterator.reset()
-           valid_iterator_tmp = self.label_switch(valid_iterator)
-           valid_nll, valid_acc = self.validate(
-               model_out, valid_iterator_tmp, self.l1_weight, self.l2_weight)
-           logger.info('Epoch %i: PreValidation cost (%s) for initial model is %.3f. Accuracy is %.2f%%'
-                       % (self.lr_scheduler.epoch, cost_name, valid_nll, valid_acc * 100.))
-           valid_stats.append((valid_nll, valid_acc))
+            valid_iterator.reset()
+            valid_iterator_tmp = self.label_switch(valid_iterator)
+            valid_nll, valid_acc = self.validate(
+                model_out, valid_iterator_tmp, self.l1_weight, self.l2_weight)
+            logger.info('Epoch %i: PreValidation cost (%s) for initial model is %.3f. Accuracy is %.2f%%'
+                        % (self.lr_scheduler.epoch, cost_name, valid_nll, valid_acc * 100.))
+            valid_stats.append((valid_nll, valid_acc))
 
         layers = model.layers
         layers_out = list()
@@ -434,59 +441,60 @@ class SGDOptimiser(Optimiser):
                 noise_layer = -1
 
             while not converged:
-               train_iterator.reset()
+                train_iterator.reset()
 
-               tstart = time.clock()
-               tr_nll, tr_acc = self.pretrain_epoch(model=model_out,
-                                                    train_iterator=(
-                                                        train_iterator),
-                                                    learning_rate=self.lr_scheduler.get_rate(),
-                                                    to_layer=to_layer,
-                                                    fprop_list=fprop_list,
-                                                    final=final,
-                                                    noise_up_layer=noise_layer)
-               tstop = time.clock()
-               tr_stats.append((tr_nll, tr_acc))
+                tstart = time.clock()
+                tr_nll, tr_acc = self.pretrain_epoch(model=model_out,
+                                                     train_iterator=(
+                                                         train_iterator),
+                                                     learning_rate=self.lr_scheduler.get_rate(),
+                                                     to_layer=to_layer,
+                                                     fprop_list=fprop_list,
+                                                     final=final,
+                                                     noise_up_layer=noise_layer)
+                tstop = time.clock()
+                tr_stats.append((tr_nll, tr_acc))
 
-               logger.info('Epoch %i: PreTraining cost (%s) is %.3f. Accuracy is %.2f%%'
-                           % (self.lr_scheduler.epoch + 1, cost_name, tr_nll, tr_acc * 100.))
+                logger.info('Epoch %i: PreTraining cost (%s) is %.3f. Accuracy is %.2f%%'
+                            % (self.lr_scheduler.epoch + 1, cost_name, tr_nll, tr_acc * 100.))
 
-               vstart = time.clock()
-               if valid_iterator is not None:
-                   valid_iterator.reset()
-                   if fprop_list is not None:
-                       valid_iterator_tmp = fprop_list
-                   elif not final:
-                       valid_iterator_tmp = self.label_switch(valid_iterator)
-                   else:
-                       valid_iterator_tmp = valid_iterator
-                   valid_nll, valid_acc = self.validate(model_out, valid_iterator_tmp,
-                                                        self.l1_weight, self.l2_weight)
-                   logger.info('Epoch %i: PreValidation cost (%s) is %.3f. Accuracy is %.2f%%'
-                               % (self.lr_scheduler.epoch + 1, cost_name, valid_nll, valid_acc * 100.))
-                   self.lr_scheduler.get_next_rate(valid_acc)
-                   valid_stats.append((valid_nll, valid_acc))
-               else:
-                   self.lr_scheduler.get_next_rate(None)
-               vstop = time.clock()
+                vstart = time.clock()
+                if valid_iterator is not None:
+                    valid_iterator.reset()
+                    if fprop_list is not None:
+                        valid_iterator_tmp = fprop_list
+                    elif not final:
+                        valid_iterator_tmp = self.label_switch(valid_iterator)
+                    else:
+                        valid_iterator_tmp = valid_iterator
+                    valid_nll, valid_acc = self.validate(model_out, valid_iterator_tmp,
+                                                         self.l1_weight, self.l2_weight)
+                    logger.info('Epoch %i: PreValidation cost (%s) is %.3f. Accuracy is %.2f%%'
+                                % (self.lr_scheduler.epoch + 1, cost_name, valid_nll, valid_acc * 100.))
+                    self.lr_scheduler.get_next_rate(valid_acc)
+                    valid_stats.append((valid_nll, valid_acc))
+                else:
+                    self.lr_scheduler.get_next_rate(None)
+                vstop = time.clock()
 
-               train_speed = train_iterator.num_examples_presented() / \
-                                                                   (tstop -
-                                                                    tstart)
-               valid_speed = valid_iterator.num_examples_presented() / \
-                                                                   (vstop -
-                                                                    vstart)
-               tot_time = vstop - tstart
-               # pps = presentations per second
-               logger.info("Epoch %i: Took %.0f seconds. PreTraining speed %.0f pps. "
-                           "Validation speed %.0f pps."
-                           % (self.lr_scheduler.epoch, tot_time, train_speed, valid_speed))
+                train_speed = train_iterator.num_examples_presented() / \
+                    (tstop -
+                     tstart)
+                valid_speed = valid_iterator.num_examples_presented() / \
+                    (vstop -
+                     vstart)
+                tot_time = vstop - tstart
+                # pps = presentations per second
+                logger.info("Epoch %i: Took %.0f seconds. PreTraining speed %.0f pps. "
+                            "Validation speed %.0f pps."
+                            % (self.lr_scheduler.epoch, tot_time, train_speed, valid_speed))
 
-               converged = (self.lr_scheduler.get_rate() == 0)
+                converged = (self.lr_scheduler.get_rate() == 0)
             # reseting epochs to zero could have just done lr_shed.epoch =0
             # but I foucsed most my time on cleaning up the conv code
-            self.lr_scheduler = copy(self.cache_l)
-            self.dp_scheduler = copy(self.cache_d)
+            self.lr_scheduler.epoch = 0
+            if self.dp_scheduler is not None:
+                self.dp_scheduler.epoch = 0
             converged = False
             layers_out.append(model_out.layers[to_layer])
 
@@ -506,10 +514,10 @@ class SGDOptimiser(Optimiser):
         model_out.add_layer(init_layer)
 
         bleugh = layers_dict[layers[-1].get_name()](idim=init_layer.odim,
-                                 odim=layers[-1].odim, rng=model.rng, irange=layers[-1].irange)
+                                                    odim=layers[-1].odim, rng=model.rng, irange=layers[-1].irange)
 
         model_out.add_layer((layers_dict[layers[-1].get_name()](idim=init_layer.odim,
-                                 odim=layers[-1].odim, rng=model.rng, irange=layers[-1].irange)))
+                                                                odim=layers[-1].odim, rng=model.rng, irange=layers[-1].irange)))
 
         # do the initial validation
         train_iterator.reset()
@@ -541,7 +549,7 @@ class SGDOptimiser(Optimiser):
                 # in layers.py to cater for the global variables that allowed me
                 # to do so. I believe this may have been overlooked
                 model_out.add_layer(layers_dict[layers[-1].get_name()](idim=tmp_layer.odim,
-                                         odim=layers[-1].odim, rng=model.rng, irange=layers[-1].irange))
+                                                                       odim=layers[-1].odim, rng=model.rng, irange=layers[-1].irange))
             while not converged:
                 train_iterator.reset()
 
@@ -571,11 +579,11 @@ class SGDOptimiser(Optimiser):
                 vstop = time.clock()
 
                 train_speed = train_iterator.num_examples_presented() / \
-                                                                    (tstop -
-                                                                     tstart)
+                    (tstop -
+                     tstart)
                 valid_speed = valid_iterator.num_examples_presented() / \
-                                                                    (vstop -
-                                                                     vstart)
+                    (vstop -
+                     vstart)
                 tot_time = vstop - tstart
                 # pps = presentations per second
                 logger.info("Epoch %i: Took %.0f seconds. PreTraining speed %.0f pps. "
@@ -647,7 +655,6 @@ class SGDOptimiser(Optimiser):
 
         return training_cost, numpy.mean(acc_list)
 
-
     @staticmethod
     def fft_label_switch(train_iterator,
                          noise=lambda x: x):
@@ -659,29 +666,22 @@ class SGDOptimiser(Optimiser):
             tp.append(np.abs(fft(x)))
         return zip(xp, tp)
 
-
     def spretrain_epoch(self, model, train_iterator,
-                        learning_rate, fprop_list, to_layer=0,
-                        final=False, noise_up_layer=-1, noise=False):
+                        learning_rate, fprop_list, to_layer=0):
 
         acc_list, nll_list = [], []
 
         if fprop_list is not None:
             train_iterator = fprop_list
         for x, t in train_iterator:
-            t2 = t
-
-            if noise:
-                x *= self.noise_stack[0]
 
             if self.dp_scheduler is not None:
                 y = model.fprop_dropout(x, self.dp_scheduler)
             else:
-                y = model.fprop(x, noise_up_layer=noise_up_layer,
-                                noise_list=self.noise_stack)
+                y = model.fprop(x)
 
-            cost = model.cost.cost(y, t2)
-            cost_grad = model.cost.grad(y, t2)
+            cost = model.cost.cost(y, t)
+            cost_grad = model.cost.grad(y, t)
             model.bprop(cost_grad, self.dp_scheduler)
             effective_learning_rate = learning_rate / x.shape[0]
 
@@ -698,7 +698,7 @@ class SGDOptimiser(Optimiser):
                 model.layers[i].set_params(uparams)
 
             nll_list.append(cost)
-            acc_list.append(numpy.mean(self.classification_accuracy(y, t2)))
+            acc_list.append(numpy.mean(self.classification_accuracy(y, t)))
 
         prior_costs = Optimiser.compute_prior_costs(
             model, self.l1_weight, self.l2_weight)
@@ -713,72 +713,64 @@ class SGDOptimiser(Optimiser):
                                                (train_iterator.batch_size,
                                                 f.odim)) for f in model.layers]
         converged = False
-        cost_name = model.cost.get_name()
         tr_stats, valid_stats = [], []
 
         cost = MSECost()
         model_out = MLP(cost=cost)
 
-        init_layer = Sigmoid(idim=model.layers[0].idim,
-                             odim=model.layers[0].idim*2,
-                             rng=model.rng)
+        init_layer = Linear(idim=model.layers[0].idim,
+                            odim=model.layers[0].idim*2,
+                            rng=model.rng)
         model_out.add_layer(init_layer)
-        output_layer = Sigmoid(idim=model.layers[0].idim*2,
-                               odim=model.layers[0].idim,
-                               rng=model.rng)
-        model_out.add_layer(output_layer)
-        output_layer = Sigmoid(idim=model.layers[0].idim,
-                               odim=model.layers[0].idim,
-                               rng=model.rng)
+        nl_layer = Sigmoid(idim=model.layers[0].idim*2,
+                           odim=model.layers[0].idim,
+                           rng=model.rng)
+        model_out.add_layer(nl_layer)
+        output_layer = Linear(idim=model.layers[0].idim,
+                              odim=model.layers[0].idim,
+                              rng=model.rng)
         model_out.add_layer(output_layer)
 
         # do the initial validation
         train_iterator.reset()
         train_iterator_tmp = self.label_switch(train_iterator)
-        tr_nll, tr_acc = self.validate(model_out, train_iterator_tmp, self.l1_weight, self.l2_weight)
+        tr_nll, tr_acc = self.validate(
+            model_out, train_iterator_tmp, self.l1_weight, self.l2_weight)
         logger.info('Epoch %i: SpecPreTraining cost (%s) for initial model is %.3f. Accuracy is %.2f%%'
-                   % (self.lr_scheduler.epoch, cost_name, tr_nll, tr_acc * 100.))
+                    % (self.lr_scheduler.epoch, model_out.cost.get_name(), tr_nll, tr_acc * 100.))
         tr_stats.append((tr_nll, tr_acc))
-
 
         layers = model.layers
         layers_out = list()
 
-        final = False
-
-        noise_layer = -1
-        if noise:
-            noise_layer = 0
 
         train_iterator.reset()
-        fprop_list = self.label_switch(deepcopy(train_iterator))
-        print fprop_list
+        fprop_list = self.fft_label_switch(deepcopy(train_iterator))
+        # print fprop_list
         while not converged:
-           train_iterator.reset()
+            train_iterator.reset()
 
-           tstart = time.clock()
-           tr_nll, tr_acc = self.spretrain_epoch(model=model_out,
-                                                 train_iterator=(train_iterator),
-                                                 learning_rate=self.lr_scheduler.get_rate(),
-                                                 to_layer=0,
-                                                 fprop_list= fprop_list,
-                                                 final=final,
-                                                 noise_up_layer=noise_layer)
-           tstop = time.clock()
-           tr_stats.append((tr_nll, tr_acc))
+            tstart = time.clock()
+            tr_nll, tr_acc = self.spretrain_epoch(model=model_out,
+                                                  train_iterator=(train_iterator),
+                                                  learning_rate=self.lr_scheduler.get_rate(),
+                                                  to_layer=0,
+                                                  fprop_list=fprop_list)
+            tstop = time.clock()
+            tr_stats.append((tr_nll, tr_acc))
 
-           logger.info('Epoch %i: PreTraining cost (%s) is %.3f. Accuracy is %.2f%%'
-                       % (self.lr_scheduler.epoch + 1, cost_name, tr_nll, tr_acc * 100.))
+            logger.info('Epoch %i: PreTraining cost (%s) is %.3f. Accuracy is %.2f%%'
+                        % (self.lr_scheduler.epoch + 1, model_out.cost.get_name(), tr_nll, tr_acc * 100.))
 
-           self.lr_scheduler.get_next_rate(None)
-           vstop = time.clock()
+            self.lr_scheduler.get_next_rate(None)
+            vstop = time.clock()
 
-           train_speed = train_iterator.num_examples_presented() / (tstop - tstart)
-           tot_time = vstop - tstart
+            train_speed = train_iterator.num_examples_presented() / \
+                (tstop - tstart)
+            tot_time = vstop - tstart
 
-
-           converged = (self.lr_scheduler.get_rate() == 0)
+            converged = (self.lr_scheduler.get_rate() == 0)
         # reseting epochs to zero could have just done lr_shed.epoch =0
         # but I foucsed most my time on cleaning up the conv code
 
-        return model_out ,tr_stats, valid_stats
+        return model_out, tr_stats, valid_stats
