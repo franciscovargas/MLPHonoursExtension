@@ -447,7 +447,7 @@ class ConvMaxPool2D(Layer):
     def __init__(self,
                  num_feat_maps,
                  conv_shape,
-                 pool_shape=(2, 2),
+                 pool_shape=2,
                  pool_stride=(2, 2)):
         """
 
@@ -461,7 +461,7 @@ class ConvMaxPool2D(Layer):
         self.num_feat_maps = num_feat_maps
         self.conv_shape = conv_shape
         self.pool_shape = pool_shape
-        self.p_y, self.p_x = pool_shape
+        self.p_x = pool_shape
         self.pool_stride = pool_stride
 
 

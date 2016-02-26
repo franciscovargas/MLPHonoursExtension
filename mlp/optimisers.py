@@ -56,6 +56,7 @@ class Optimiser(object):
         y_idx = numpy.argmax(y, axis=1)
         t_idx = numpy.argmax(t, axis=1)
         rval = numpy.equal(y_idx, t_idx)
+        # print rval
         return rval
 
     @staticmethod
@@ -238,8 +239,11 @@ class SGDOptimiser(Optimiser):
 
             train_speed = train_iterator.num_examples_presented() / \
                 (tstop - tstart)
-            valid_speed = valid_iterator.num_examples_presented() / \
-                (vstop - vstart)
+            try:
+                valid_speed = valid_iterator.num_examples_presented() / \
+                    (vstop - vstart)
+            except:
+                valid_speed = float('inf')
             tot_time = vstop - tstart
             logger.info("Epoch %i: Took %.0f seconds. Training speed %.0f pps. "
                         "Validation speed %.0f pps."
