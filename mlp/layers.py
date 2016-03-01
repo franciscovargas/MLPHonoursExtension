@@ -92,6 +92,7 @@ class MLP(object):
             self.rng = numpy.random.RandomState([2015, 11, 11])
         else:
             self.rng = rng
+            # print "rng inherited"
 
     def fprop(self, x, noise_up_layer=-1, noise_list=None, wrong=False):
         """
@@ -213,6 +214,7 @@ class Layer(object):
             seed = [2015, 10, 1]
             self.rng = numpy.random.RandomState(seed)
         else:
+            # print "inherited"
             self.rng = rng
 
     def fprop(self, inputs):
@@ -295,7 +297,8 @@ class Linear(Layer):
         self.W = self.rng.uniform(
             -irange, irange,
             (self.idim, self.odim))
-
+        # print self.rng, irange
+        # print self.W
         self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
 
     def fprop(self, inputs):
@@ -737,7 +740,7 @@ class ComplexLinear(Layer):
         assert idim == odim
 
         # odim  is output and the input dimensions of the DFT layer
-        dft_mat = dft(odim)
+        dft_mat = dft(odim).T
         # diag(M * M^{dagger}) gives me the normalization values for each row
         # setting M = M^T does the trick for collumns
         normalization_vals = numpy.diag((dft_mat.T).dot(numpy.conj(dft_mat.T)))
@@ -890,6 +893,75 @@ class ComplexSigmoid(ComplexLinear):
 
     def get_name(self):
         return 'sigmoid'
+
+
+class ComplexAbs(ComplexLinear):
+
+    def __init__(self,  idim, odim,
+                 rng=None,
+                 irange=0.1):
+
+        super(ComplexAbs, self).__init__(idim, odim, rng, irange)
+        # self.Wr = numpy.power(self.Wr, 2)
+        # self.Wi = numpy.power(self.Wi, 2)
+
+    def fprop(self, inputs):
+
+        # input comes from 4D convolutional tensor, reshape to expected shape
+        # a_old = numpy.dot(inputs, self.W)
+        if inputs.ndim >2:
+            inputs = inputs.reshape(inputs.shape[0], -1)
+
+        a1 = numpy.power(numpy.dot(inputs, self.Wr), 2)  # + self.b
+        a2 = numpy.power(numpy.dot(inputs, self.Wi), 2)  # + self.b
+
+        return numpy.sqrt(a1 + a2)
+
+    def bprop(self, h, igrads):
+        if igrads.ndim >2:
+            igrads = igrads.reshape(igrads.shape[0], -1)
+        igrads = igrads / h
+        # these are irrelevant I think
+        ir = numpy.dot(igrads, self.Wr.T)
+        ii = numpy.dot(igrads, self.Wi.T)
+        ograds = numpy.concatenate((ir, ii), axis=1)
+        return igrads, ograds
+
+    def bprop_cost(self, h, igrads, cost):
+
+        raise NotImplementedError('Sigmoid.bprop_cost method not implemented '
+                                  'for the %s cost' % cost.get_name())
+
+    def pgrads(self, inputs, deltas,
+               l1_weight=0, l2_weight=0):
+
+        if inputs.ndim > 2:
+            inputs = inputs.reshape(inputs.shape[0], -1)
+        # print inputs.shape
+        # print deltas.shape, "JJJ"
+
+        l2_W_penalty, l2_b_penalty = 0, 0
+        if l2_weight > 0:
+            l2_W_penalty = l2_weight*self.W
+            l2_b_penalty = l2_weight*self.b
+
+        l1_W_penalty, l1_b_penalty = 0, 0
+        if l1_weight > 0:
+            l1_W_penalty = l1_weight*numpy.sign(self.W)
+            l1_b_penalty = l1_weight*numpy.sign(self.b)
+
+
+        grad_Wr = numpy.dot(inputs.T,
+                            numpy.dot(inputs, self.Wr) * deltas)
+        grad_Wi = numpy.dot(inputs.T,
+                            numpy.dot(inputs, self.Wi) * deltas)
+
+
+        return [grad_Wr, grad_Wi, 0]
+
+
+    def get_name(self):
+        return 'abs'
 
 
 class ComplexRelu(ComplexLinear):

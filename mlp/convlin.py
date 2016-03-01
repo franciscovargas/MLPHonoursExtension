@@ -129,6 +129,7 @@ def myconv_tense(I,k):
 
     # k_x = k.shape[0]
     k_x = k.shape[0]
+    # print I_x , k_x
     out = np.zeros((I_n, I_x - k_x + 1))
     o_y = out.shape[-1]
 
@@ -199,6 +200,7 @@ class ConvLinear_Opt(Layer):
         self.num_out_feat_maps = num_out_feat_maps
         self.irange = irange
         self.W = self.weight()
+        # print self.W
         self.b = numpy.zeros((1, self.num_out_feat_maps,odim),
                              dtype=numpy.float32)
 
@@ -210,7 +212,12 @@ class ConvLinear_Opt(Layer):
                      self.kernel_shape[0]))
 
     def fprop(self, inputs):
-
+        # print inputs.shape, "fprop"
+        if inputs.ndim < 3:
+            inputs = inputs.reshape(inputs.shape[0],
+                                    self.num_inp_feat_maps,
+                                    inputs.shape[-1])
+        # print inputs.shape, "fprop"
         image_shape = self.image_shape
         kernel_shape = self.kernel_shape
         f_in = self.W.shape[0]
@@ -233,7 +240,10 @@ class ConvLinear_Opt(Layer):
         return out
 
     def bprop(self, h, igrads):
-
+        # if h is not None:
+        #     print "h", h.shape
+        # if igrads is not None:
+        #     print "i", igrads.shape
         image_shape = self.image_shape
         kernel_shape = self.kernel_shape
 
@@ -278,7 +288,12 @@ class ConvLinear_Opt(Layer):
         since W and b are only layer's parameters
         """
 
+        if inputs.ndim < 3:
+            inputs = inputs.reshape(inputs.shape[0],
+                                    self.num_inp_feat_maps,
+                                    inputs.shape[-1])
 
+        # print inputs.shape, "pgrads", deltas.shape
 
         l2_W_penalty, l2_b_penalty = 0, 0
         if l2_weight > 0:

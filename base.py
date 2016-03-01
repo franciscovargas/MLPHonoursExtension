@@ -15,8 +15,10 @@ import logging
 from mlp.dataset import *
 
 
-def base(train_dp, valid_dp, rng, logger):
-    learning_rate = 0.01
+def base(train_dp, valid_dp, logger, learning_rate):
+    # learning_rate = 0.01
+    rng = numpy.random.RandomState([2016,02,26])
+
     max_epochs = 1000
     cost = CECost()
 
@@ -31,6 +33,7 @@ def base(train_dp, valid_dp, rng, logger):
     model = MLP(cost=cost)
     model.add_layer(Relu(idim=125, odim=125, irange=1.6, rng=rng))
     model.add_layer(Softmax(idim=125, odim=19, rng=rng))
+
 
     # define the optimiser, here stochasitc gradient descent
     # with fixed learning rate and max_epochs

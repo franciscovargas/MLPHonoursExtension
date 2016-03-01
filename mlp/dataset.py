@@ -9,6 +9,8 @@ import os
 from scipy.fftpack import fft as dft
 import numpy as np
 import logging
+from scipy import signal
+
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +25,7 @@ class DataProvider(object):
         """
         :param batch_size: int, specifies the number
                of elements returned at each step
-        :param randomize: bool, shuffles examples prior
+        :param randomize: bool, shuffles examples priorfprop
                to iteration, so they are presented in random
                order for stochastic gradient descent training
         :return:
@@ -114,7 +116,7 @@ class MACLDataProvider(DataProvider):
                  max_num_examples=-1,
                  randomize=True,
                  rng=None,
-                 conv_reshape=False,name='RHAy', fft= False):
+                 conv_reshape=False,name='RHAy', fft= False, stft=False):
 
         super(MACLDataProvider, self).\
             __init__(batch_size, randomize, rng)
@@ -151,6 +153,18 @@ class MACLDataProvider(DataProvider):
         self.x = x[:,enum.s]
         if fft:
             self.x = np.abs(dft(self.x, axis=-1))
+        if stft:
+            # wind = signal.get_window('hamming', 7)
+            f, t2, s = signal. spectrogram(self.x,
+                                          nperseg=50,
+                                          noverlap=50 - 25,
+                                          axis=-1,
+                                          scaling='spectrum',
+                                          mode='magnitude')
+
+            self.x = s.reshape(self.x.shape[0], -1)
+
+            # print self.x.shape
         print self.x.shape
         self.t = t -1
         self.num_classes = 19
