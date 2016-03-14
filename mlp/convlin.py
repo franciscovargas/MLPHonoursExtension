@@ -205,6 +205,11 @@ class ConvLinear_Opt(Layer):
                              dtype=numpy.float32)
 
 
+    def weight2(self):
+        return numpy.ones(
+                    (self.num_inp_feat_maps,  self.num_out_feat_maps,
+                     self.kernel_shape[0])) / self.kernel_shape[0]
+
     def weight(self):
         return self.rng.uniform(
                     -self.irange, self.irange,
@@ -386,6 +391,7 @@ class ConvSigmoid_Opt(ConvLinear_Opt):
         return h
 
     def bprop(self, h, igrads):
+        # print igrads.shape
         igrads = igrads.reshape(igrads.shape[0], self.num_out_feat_maps,self.odim,self.odim)
 
         dsigm = h * (1.0 - h)
@@ -438,6 +444,7 @@ class ConvRelu_Opt(ConvLinear_Opt):
         return h
 
     def bprop(self, h, igrads):
+        # print igrads.shape
         igrads = igrads.reshape(igrads.shape[0], self.num_out_feat_maps,self.odim)
 
         deltas = (h > 0)*igrads

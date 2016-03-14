@@ -909,7 +909,7 @@ class ComplexAbs(ComplexLinear):
 
         # input comes from 4D convolutional tensor, reshape to expected shape
         # a_old = numpy.dot(inputs, self.W)
-        if inputs.ndim >2:
+        if inputs.ndim > 2:
             inputs = inputs.reshape(inputs.shape[0], -1)
 
         a1 = numpy.power(numpy.dot(inputs, self.Wr), 2)  # + self.b
@@ -920,12 +920,13 @@ class ComplexAbs(ComplexLinear):
     def bprop(self, h, igrads):
         if igrads.ndim >2:
             igrads = igrads.reshape(igrads.shape[0], -1)
+        # h[h==0] = 1
         igrads = igrads / h
         # these are irrelevant I think
         ir = numpy.dot(igrads, self.Wr.T)
         ii = numpy.dot(igrads, self.Wi.T)
-        ograds = numpy.concatenate((ir, ii), axis=1)
-        return igrads, ograds
+        # ograds = numpy.concatenate((ir, ii), axis=1)
+        return igrads, ir + ii
 
     def bprop_cost(self, h, igrads, cost):
 

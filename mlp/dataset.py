@@ -79,7 +79,7 @@ class DataProvider(object):
 class mACLEnum(object):
     # http://archive.ics.uci.edu/ml/datasets/Daily+and+Sports+Activities
     # *3 is the z axis, no 11 is y-axis *3 I dont know
-    #  3 ???????? 
+    #  3 ????????
     # Accelerometer dic (I hope... ffs)
     dic = {
             'LHAx': (18),
@@ -97,7 +97,7 @@ class mACLEnum(object):
             'RHAz': (11),
             'RLAz': (29),
             'CAz' : (2),
-            
+
     }
 
     def __init__(self, name='RHAy'):
@@ -121,7 +121,7 @@ class MACLDataProvider(DataProvider):
         super(MACLDataProvider, self).\
             __init__(batch_size, randomize, rng)
 
-        assert dset in ['train', 'valid', 'eval'], (
+        assert dset in ['train', 'valid', 'test'], (
             "Expected dset to be either 'train', "
             "'valid' or 'eval' got %s" % dset
         )
@@ -135,7 +135,7 @@ class MACLDataProvider(DataProvider):
                   "a deprecead 'max_num_examples' arguments. We will " \
                   "use the former over the latter.")
 
-        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%sc.pkl.gz' % dset
+        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%sv.pkl.gz' % dset
         assert os.path.isfile(dset_path), (
             "File %s was expected to exist!." % dset_path
         )
@@ -149,20 +149,39 @@ class MACLDataProvider(DataProvider):
         #but it maps us to the max_num_batches anyway
         if max_num_examples > 0 and max_num_batches < 0:
             self._max_num_batches = max_num_examples / self.batch_size
-        enum = mACLEnum(name)
-        self.x = x[:,enum.s]
-        if fft:
-            self.x = np.abs(dft(self.x, axis=-1))
-        if stft:
-            # wind = signal.get_window('hamming', 7)
-            f, t2, s = signal. spectrogram(self.x,
-                                          nperseg=50,
-                                          noverlap=50 - 25,
-                                          axis=-1,
-                                          scaling='spectrum',
-                                          mode='magnitude')
+        if isinstance(name, str):
+            enum = mACLEnum(name)
+            self.x = x[:,enum.s]
+            if fft:
+                self.x = np.abs(dft(self.x, axis=-1))
+            if stft:
+                # wind = signal.get_window('hamming', 7)
+                f, t2, s = signal. spectrogram(self.x,
+                                               nperseg=50,
+                                               noverlap=50 - 25,
+                                               axis=-1,
+                                               scaling='spectrum',
+                                               mode='magnitude')
 
-            self.x = s.reshape(self.x.shape[0], -1)
+                self.x = s.reshape(self.x.shape[0], -1)
+        else:
+            n = name.pop(0)
+            enum = mACLEnum(n)
+            if fft:
+                self.x = np.abs(dft(x[:,enum.s], axis=-1))
+            else:
+                self.x = x[:,enum.s]
+            for n in name:
+                enum = mACLEnum(n)
+                if fft:
+                    self.x = numpy.concatenate((self.x ,
+                                               np.abs(dft(x[:,enum.s],
+                                                      axis=-1))), axis=-1)
+                else:
+                    self.x = numpy.concatenate((self.x , x[:, enum.s]), axis=-1)
+            print "shape final: ", self.x.shape
+
+
 
             # print self.x.shape
         print self.x.shape
