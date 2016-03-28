@@ -269,6 +269,7 @@ class ConvLinear_Opt(Layer):
                 w = self.W[j,k,::-1]
                 conv =  my1_conv2d_tense(x_in, w, mode='bprop')
                 ograds[:,j,:] += conv
+        # print deltas.shape, ograds.shape
         return deltas, ograds
 
     def bprop_cost(self, h, igrads, cost):

@@ -178,6 +178,7 @@ class MLP(object):
         self.deltas[top_layer_idx], ograds = self.layers[top_layer_idx - 1].\
             bprop_cost(self.activations[top_layer_idx], cost_grad, self.cost)
 
+
         p_hid_scaler = 1.0
         if dp_scheduler is not None:
             p_inp, p_hid = dp_scheduler.get_rate()
@@ -185,6 +186,7 @@ class MLP(object):
 
         # then back-prop through remaining layers
         for i in xrange(top_layer_idx - 1, 0, -1):
+            # print ograds.shape, "!hhhhhhhhhhh",( ograds*p_hid_scaler).shape,  self.layers[i - 1], self.activations[i]
             self.deltas[i], ograds = self.layers[i - 1].\
                 bprop(self.activations[i], ograds*p_hid_scaler)
 
@@ -341,6 +343,10 @@ class Linear(Layer):
 
         # since df^i/da^i = 1 (f is assumed identity function),
         # deltas are in fact the same as igrads
+        # print igrads.shape
+        if igrads.ndim >2:
+            igrads = igrads.reshape(igrads.shape[0], -1)
+        # print igrads.shape
         ograds = numpy.dot(igrads, self.W.T)
         return igrads, ograds
 
@@ -444,6 +450,9 @@ class Sigmoid(Linear):
         return h
 
     def bprop(self, h, igrads):
+
+        if igrads.ndim >2:
+            igrads = igrads.reshape(igrads.shape[0], -1)
         dsigm = h * (1.0 - h)
         deltas = igrads * dsigm
         ___, ograds = super(Sigmoid, self).bprop(h=None, igrads=deltas)
@@ -610,122 +619,6 @@ class Maxout(Linear):
         return 'maxout'
 
 
-class DFTLinear(Layer):
-
-    def __init__(self, idim, odim,
-                 rng=None,
-                 irange=0.1):
-
-        super(DFTLinear, self).__init__(rng=rng)
-
-        self.idim = idim
-        self.odim = odim
-        # must be true for fourier layer
-        assert idim == odim
-
-        self.W = dft(odim)
-        self.Wr = numpy.real(self.W)
-        self.Wi = numpy.imag(self.W)
-
-        self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
-
-    def norm_weights(self, train_iterator):
-        """
-        Normalize dft weights by E[(wx)^2]
-        """
-        n = 1
-        for inputs, t in train_iterator:
-            if n == 1:
-                # + self.b
-                n1 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2)
-                n2 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
-                n += 1
-                continue
-            n1 += (1.0/inputs.shape[1]) * \
-                numpy.dot(inputs**2, self.Wr**2)  # + self.b
-            n2 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
-            n += 1
-        n1 /= n
-        n2 /= n
-        self.Wr = self.Wr / numpy.mean(n1, axis=0)
-        n2m = numpy.mean(n2, axis=0)
-        n2m[n2m == 0.0] = 1.0
-        self.Wi = self.Wi / n2m
-
-    def fprop(self, inputs):
-
-        # input comes from 4D convolutional tensor, reshape to expected shape
-        if inputs.ndim == 4:
-            inputs = inputs.reshape(inputs.shape[0], -1)
-
-        a_old = numpy.dot(inputs, self.W)
-        a1 = numpy.real(a_old) + self.b
-        a2 = numpy.real(a_old) + self.b
-        a = numpy.concatenate((a1, a2), axis=1)
-        # a = a_old + self.b
-        # here f() is an identity function, so just return a linear
-        # transformation
-        return a
-
-    def bprop(self, h, igrads):
-
-        ograds = 0
-        return igrads, ograds
-
-    def bprop_cost(self, h, igrads, cost):
-
-        if cost is None or cost.get_name() == 'mse':
-            # for linear layer and mean square error cost,
-            # cost back-prop is the same as standard back-prop
-            return self.bprop(h, igrads)
-        else:
-            raise NotImplementedError('Linear.bprop_cost method not implemented '
-                                      'for the %s cost' % cost.get_name())
-
-    def pgrads(self, inputs, deltas, l1_weight=0, l2_weight=0):
-
-        grad_W = 0
-        grad_b = 0
-
-        return [grad_W, grad_b]
-
-    def get_params(self):
-        return [self.W, self.b]
-
-    def set_params(self, params):
-        # we do not make checks here, but the order on the list
-        # is assumed to be exactly the same as get_params() returns
-        self.W = params[0]
-        self.b = params[1]
-
-    def get_name(self):
-        return 'dftlinear'
-
-
-class DFTAugLinear(DFTLinear):
-
-    def __init__(self,  idim, odim,
-                 rng=None,
-                 irange=0.1):
-
-        super(DFTAugLinear, self).__init__(idim, odim, rng, irange)
-
-    def fprop(self, inputs):
-
-        if inputs.ndim == 4:
-            inputs = inputs.reshape(inputs.shape[0], -1)
-
-        a_old = numpy.dot(inputs, self.W)
-        a1 = numpy.real(a_old) + self.b
-        a2 = numpy.real(a_old) + self.b
-        a = numpy.concatenate((a1, a2, inputs), axis=1)
-
-        return a
-
-    def get_name(self):
-        return 'dftlinear'
-
-
 class ComplexLinear(Layer):
 
     def __init__(self, idim, odim,
@@ -856,45 +749,6 @@ class ComplexLinear(Layer):
     def get_name(self):
         return 'clinear'
 
-
-class ComplexSigmoid(ComplexLinear):
-
-    def __init__(self,  idim, odim,
-                 rng=None,
-                 irange=0.1):
-
-        super(ComplexSigmoid, self).__init__(idim, odim, rng, irange)
-
-    def fprop(self, inputs):
-        # get the linear activations
-        a = super(ComplexSigmoid, self).fprop(inputs)
-        # stabilise the exp() computation in case some values in
-        #'a' get very negative. We limit both tails, however only
-        # negative values may lead to numerical issues -- exp(-a)
-        # clip() function does the following operation faster:
-        # a[a < -30.] = -30,
-        # a[a > 30.] = 30.
-        numpy.clip(a, -30.0, 30.0, out=a)
-        h = 1.0/(1 + numpy.exp(-a))
-        return h
-
-    def bprop(self, h, igrads):
-        dsigm = h * (1.0 - h)
-        deltas = igrads * dsigm
-        ___, ograds = super(ComplexSigmoid, self).bprop(h=None, igrads=deltas)
-        return deltas, ograds
-
-    def bprop_cost(self, h, igrads, cost):
-        if cost is None or cost.get_name() == 'bce':
-            return super(ComplexSigmoid, self).bprop(h=h, igrads=igrads)
-        else:
-            raise NotImplementedError('Sigmoid.bprop_cost method not implemented '
-                                      'for the %s cost' % cost.get_name())
-
-    def get_name(self):
-        return 'sigmoid'
-
-
 class ComplexAbs(ComplexLinear):
 
     def __init__(self,  idim, odim,
@@ -918,10 +772,17 @@ class ComplexAbs(ComplexLinear):
         return numpy.sqrt(a1 + a2)
 
     def bprop(self, h, igrads):
+        # print igrads.shape
         if igrads.ndim >2:
             igrads = igrads.reshape(igrads.shape[0], -1)
+        # print igrads.shape
         # h[h==0] = 1
+        # import matplotlib.pyplot as plt
+        # plt.imshow(igrads)
         igrads = igrads / h
+        # print igrads
+        # plt.imshow(igrads)
+        # plt.show()
         # these are irrelevant I think
         ir = numpy.dot(igrads, self.Wr.T)
         ii = numpy.dot(igrads, self.Wi.T)
@@ -938,169 +799,14 @@ class ComplexAbs(ComplexLinear):
 
         if inputs.ndim > 2:
             inputs = inputs.reshape(inputs.shape[0], -1)
-        # print inputs.shape
-        # print deltas.shape, "JJJ"
-
-        l2_W_penalty, l2_b_penalty = 0, 0
-        if l2_weight > 0:
-            l2_W_penalty = l2_weight*self.W
-            l2_b_penalty = l2_weight*self.b
-
-        l1_W_penalty, l1_b_penalty = 0, 0
-        if l1_weight > 0:
-            l1_W_penalty = l1_weight*numpy.sign(self.W)
-            l1_b_penalty = l1_weight*numpy.sign(self.b)
-
 
         grad_Wr = numpy.dot(inputs.T,
                             numpy.dot(inputs, self.Wr) * deltas)
         grad_Wi = numpy.dot(inputs.T,
                             numpy.dot(inputs, self.Wi) * deltas)
 
-
         return [grad_Wr, grad_Wi, 0]
 
 
     def get_name(self):
         return 'abs'
-
-
-class ComplexRelu(ComplexLinear):
-
-    def __init__(self,  idim, odim,
-                 rng=None,
-                 irange=0.1):
-
-        super(ComplexRelu, self).__init__(idim, odim, rng, irange)
-
-    def fprop(self, inputs):
-        # get the linear activations
-        a = super(ComplexRelu, self).fprop(inputs)
-        h = numpy.clip(a, 0, 20.0)
-        # h = numpy.maximum(a, 0)
-        return h
-
-    def bprop(self, h, igrads):
-        igrads = (h > 0)*igrads
-        igrads = igrads.reshape(igrads.shape[0], 2,
-                                igrads.shape[1] / 2)
-        ir = numpy.dot(igrads[:, ::2, :], self.Wr.T)
-        ii = numpy.dot(igrads[:, 1::2, :], self.Wi.T)
-        ograds = numpy.concatenate((ir, ii), axis=1)
-        return igrads, ograds
-
-    def bprop_cost(self, h, igrads, cost):
-        raise NotImplementedError('Relu.bprop_cost method not implemented '
-                                  'for the %s cost' % cost.get_name())
-
-    def get_name(self):
-        return 'relu'
-
-
-class DFTPLinear(Layer):
-
-    def __init__(self, idim, odim,
-                 rng=None,
-                 irange=0.1):
-
-        super(DFTPLinear, self).__init__(rng=rng)
-
-        self.idim = idim
-        self.odim = odim
-        # must be true for fourier layer
-        assert idim == odim
-
-        self.W = dft(odim)
-        self.Wr = numpy.real(self.W)
-        self.Wi = numpy.imag(self.W)
-
-        self.b = numpy.zeros((self.odim,), dtype=numpy.float32)
-
-    def norm_weights(self, train_iterator):
-        """
-        Normalize dft weights by E[(wx)^2]
-        """
-        n = 1
-        for inputs, t in train_iterator:
-            if n == 1:
-                # + self.b
-                n1 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wr**2)
-                n2 = (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
-                n += 1
-                continue
-            n1 += (1.0/inputs.shape[1]) * \
-                numpy.dot(inputs**2, self.Wr**2)  # + self.b
-            n2 += (1.0/inputs.shape[1])*numpy.dot(inputs**2, self.Wi**2)
-            n += 1
-        n1 /= n
-        n2 /= n
-        self.Wr = self.Wr / numpy.mean(n1, axis=0)
-        n2m = numpy.mean(n2, axis=0)
-        n2m[n2m == 0.0] = 1.0
-        self.Wi = self.Wi / n2m
-
-    def fprop(self, inputs, phase=False, stft=False):
-
-        # input comes from 4D convolutional tensor, reshape to expected shape
-        if inputs.ndim == 4:
-            inputs = inputs.reshape(inputs.shape[0], -1)
-
-        a_old = numpy.dot(inputs, self.W)
-
-        # a = a_old + self.b
-        # here f() is an identity function, so just return a linear
-        # transformation
-        if phase:
-
-            return numpy.concatenate((numpy.abs(a_old),
-                                      numpy.angle(a_old)),
-                                     axis=1)
-        else:
-            if stft:
-                wind = signal.get_window('hamming', 7)
-                f, t, s = signal. spectrogram(inputs,
-                                              nperseg=70,
-                                              noverlap=70 - 25,
-                                              axis=-1,
-                                              scaling='spectrum',
-                                              mode='magnitude')
-
-                flat = s.reshape(inputs.shape[0], -1)
-
-                return flat
-            else:
-                return numpy.abs(a_old)
-
-    def bprop(self, h, igrads):
-
-        ograds = 0
-        return igrads, ograds
-
-    def bprop_cost(self, h, igrads, cost):
-
-        if cost is None or cost.get_name() == 'mse':
-            # for linear layer and mean square error cost,
-            # cost back-prop is the same as standard back-prop
-            return self.bprop(h, igrads)
-        else:
-            raise NotImplementedError('Linear.bprop_cost method not implemented '
-                                      'for the %s cost' % cost.get_name())
-
-    def pgrads(self, inputs, deltas, l1_weight=0, l2_weight=0):
-
-        grad_W = 0
-        grad_b = 0
-
-        return [grad_W, grad_b]
-
-    def get_params(self):
-        return [self.W, self.b]
-
-    def set_params(self, params):
-        # we do not make checks here, but the order on the list
-        # is assumed to be exactly the same as get_params() returns
-        self.W = params[0]
-        self.b = params[1]
-
-    def get_name(self):
-        return 'dftplinear'

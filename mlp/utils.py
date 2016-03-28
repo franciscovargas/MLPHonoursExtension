@@ -17,28 +17,38 @@ def numerical_gradient(f, x, eps=1e-4, **kwargs):
     gf = g.ravel()
 
     for i in xrange(xf.shape[0]):
+        # print i
         xx = xf[i]
         xf[i] = xx + eps
         fp_eps, ___ = f(xc, **kwargs)
+        # print fp_eps
         xf[i] = xx - eps
         fm_eps, ___ = f(xc, **kwargs)
         xf[i] = xx
+        # print i, (fp_eps - fm_eps)/(2*eps), gf[i]
         gf[i] = (fp_eps - fm_eps)/(2*eps)
 
     return g
 
-
+import matplotlib.pyplot as plt
 def verify_gradient(f, x, eps=1e-4, tol=1e-6, **kwargs):
     """
     Compares the numerical and analytical gradients.
     """
+    # print
     fval, fgrad = f(x=x, **kwargs)
+    # print fval, fgrad.shape
+    # bbbbbbbb
     ngrad = numerical_gradient(f=f, x=x, eps=eps, tol=tol, **kwargs)
 
     fgradnorm = numpy.sqrt(numpy.sum(fgrad**2))
     ngradnorm = numpy.sqrt(numpy.sum(ngrad**2))
     diffnorm = numpy.sqrt(numpy.sum((fgrad-ngrad)**2))
-
+    # print fval.shape
+    plt.matshow(fgrad)
+    plt.show()
+    plt.matshow(ngrad)
+    plt.show()
     if fgradnorm > 0 or ngradnorm > 0:
         norm = numpy.maximum(fgradnorm, ngradnorm)
         if not (diffnorm < tol or diffnorm/norm < tol):
@@ -61,21 +71,23 @@ def verify_layer_gradient(layer, x, eps=1e-4, tol=1e-6):
     def grad_layer_wrapper(x, **kwargs):
         h = layer.fprop(x)
         deltas, ograds = layer.bprop(h=h, igrads=numpy.ones_like(h))
-        return numpy.sum(h), ograds
+        # plt.matshow(deltas)
+        # plt.show()
+        return numpy.sum(h), deltas
 
     return verify_gradient(f=grad_layer_wrapper, x=x, eps=eps, tol=tol, layer=layer)
 
 
 def test_conv_linear_fprop(layer, kernel_order='ioxy', kernels_first=True,
                            dtype=numpy.float):
-    """ 
+    """
     Tests forward propagation method of a convolutional layer.
-    
+
     Checks the outputs of `fprop` method for a fixed input against known
     reference values for the outputs and raises an AssertionError if
     the outputted values are not consistent with the reference values. If
     tests are all passed returns True.
-    
+
     Parameters
     ----------
     layer : instance of Layer subclass
@@ -94,14 +106,14 @@ def test_conv_linear_fprop(layer, kernel_order='ioxy', kernels_first=True,
         to signatures of `get_params` and `set_params` being:
             kernels, biases = layer.get_params()
             layer.set_params([kernels, biases])
-        If False this corresponds to signatures of `get_params` and 
+        If False this corresponds to signatures of `get_params` and
         `set_params` being:
             biases, kernels = layer.get_params()
             layer.set_params([biases, kernels])
     dtype : numpy data type
          Data type to use in numpy arrays passed to layer methods. Default
          is `numpy.float`.
-            
+
     Raises
     ------
     AssertionError
@@ -151,17 +163,17 @@ def test_conv_linear_fprop(layer, kernel_order='ioxy', kernels_first=True,
         layer.set_params(orig_params)
     return True
 
-  
+
 def test_conv_linear_bprop(layer, kernel_order='ioxy', kernels_first=True,
                            dtype=numpy.float):
-    """ 
+    """
     Tests input gradients backpropagation method of a convolutional layer.
-    
+
     Checks the outputs of `bprop` method for a fixed input against known
     reference values for the outputs and raises an AssertionError if
     the outputted values are not consistent with the reference values. If
     tests are all passed returns True.
-    
+
     Parameters
     ----------
     layer : instance of Layer subclass
@@ -180,14 +192,14 @@ def test_conv_linear_bprop(layer, kernel_order='ioxy', kernels_first=True,
         to signatures of `get_params` and `set_params` being:
             kernels, biases = layer.get_params()
             layer.set_params([kernels, biases])
-        If False this corresponds to signatures of `get_params` and 
+        If False this corresponds to signatures of `get_params` and
         `set_params` being:
             biases, kernels = layer.get_params()
             layer.set_params([biases, kernels])
     dtype : numpy data type
          Data type to use in numpy arrays passed to layer methods. Default
          is `numpy.float`.
-            
+
     Raises
     ------
     AssertionError
@@ -260,17 +272,17 @@ def test_conv_linear_bprop(layer, kernel_order='ioxy', kernels_first=True,
         layer.set_params(orig_params)
     return True
 
-   
+
 def test_conv_linear_pgrads(layer, kernel_order='ioxy', kernels_first=True,
                             dtype=numpy.float):
-    """ 
+    """
     Tests parameter gradients backpropagation method of a convolutional layer.
-    
+
     Checks the outputs of `pgrads` method for a fixed input against known
     reference values for the outputs and raises an AssertionError if
     the outputted values are not consistent with the reference values. If
     tests are all passed returns True.
-    
+
     Parameters
     ----------
     layer : instance of Layer subclass
@@ -289,14 +301,14 @@ def test_conv_linear_pgrads(layer, kernel_order='ioxy', kernels_first=True,
         to signatures of `get_params` and `set_params` being:
             kernels, biases = layer.get_params()
             layer.set_params([kernels, biases])
-        If False this corresponds to signatures of `get_params` and 
+        If False this corresponds to signatures of `get_params` and
         `set_params` being:
             biases, kernels = layer.get_params()
             layer.set_params([biases, kernels])
     dtype : numpy data type
          Data type to use in numpy arrays passed to layer methods. Default
          is `numpy.float`.
-            
+
     Raises
     ------
     AssertionError
@@ -358,4 +370,3 @@ def test_conv_linear_pgrads(layer, kernel_order='ioxy', kernels_first=True,
     finally:
         layer.set_params(orig_params)
     return True
-

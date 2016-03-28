@@ -116,7 +116,7 @@ class MACLDataProvider(DataProvider):
                  max_num_examples=-1,
                  randomize=True,
                  rng=None,
-                 conv_reshape=False,name='RHAy', fft= False, stft=False):
+                 conv_reshape=False,name='RHAx', fft= False, stft=False):
 
         super(MACLDataProvider, self).\
             __init__(batch_size, randomize, rng)
@@ -135,7 +135,7 @@ class MACLDataProvider(DataProvider):
                   "a deprecead 'max_num_examples' arguments. We will " \
                   "use the former over the latter.")
 
-        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/ACL1_%sv.pkl.gz' % dset
+        dset_path = '/afs/inf.ed.ac.uk/user/s12/s1235260/Downloads/ACL1_%sv.pkl.gz' % dset
         assert os.path.isfile(dset_path), (
             "File %s was expected to exist!." % dset_path
         )

@@ -44,6 +44,28 @@ class Optimiser(object):
 
         return nll + sum(prior_costs), acc
 
+
+    def validate2(self, model, valid_iterator, l1_weight=0, l2_weight=0):
+
+        acc_list, nll_list = [], []
+        confidence, confusion = [] , []
+        for x, t in valid_iterator:
+            # print "what ???"
+            y = model.fprop(x)
+            nll_list.append(model.cost.cost(y, t))
+            cls_acc = self.classification_accuracy(y, t)
+            acc_list.append(numpy.mean(copy(cls_acc)))
+            confidence.append(y)
+            confusion.append(cls_acc)
+
+        acc = numpy.mean(acc_list)
+        nll = numpy.mean(nll_list)
+
+        prior_costs = Optimiser.compute_prior_costs(
+            model, l1_weight, l2_weight)
+
+        return nll + sum(prior_costs), acc, confidence, confusion
+
     @staticmethod
     def classification_accuracy(y, t):
         """
