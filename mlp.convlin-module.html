@@ -6,6 +6,7 @@
   <title>mlp.convlin</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -129,17 +130,17 @@
         <span class="summary-sig-arg">kernels</span>,
         <span class="summary-sig-arg">mode</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">fprop</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">strides</span>=<span class="summary-sig-default"><code class="variable-group">(</code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>)</span><br />
-      Implements a 2d valid convolution of kernels with the image Note: 
+      Implements a 2d valid convolution of kernels with the image Note:
       filer means the same as kernel and convolution (correlation) of those
-      with the input space produces feature maps (sometimes refereed to 
+      with the input space produces feature maps (sometimes refereed to
       also as receptive fields).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#my1_conv2d">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -152,17 +153,17 @@
         <span class="summary-sig-arg">kernels</span>,
         <span class="summary-sig-arg">mode</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">fprop</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">strides</span>=<span class="summary-sig-default"><code class="variable-group">(</code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>)</span><br />
-      Implements a 2d valid convolution of kernels with the image Note: 
+      Implements a 2d valid convolution of kernels with the image Note:
       filer means the same as kernel and convolution (correlation) of those
-      with the input space produces feature maps (sometimes refereed to 
+      with the input space produces feature maps (sometimes refereed to
       also as receptive fields).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#my1_conv2d_tense">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -175,17 +176,17 @@
         <span class="summary-sig-arg">kernels</span>,
         <span class="summary-sig-arg">mode</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">fprop</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">strides</span>=<span class="summary-sig-default"><code class="variable-group">(</code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>)</span><br />
-      Implements a 2d valid convolution of kernels with the image Note: 
+      Implements a 2d valid convolution of kernels with the image Note:
       filer means the same as kernel and convolution (correlation) of those
-      with the input space produces feature maps (sometimes refereed to 
+      with the input space produces feature maps (sometimes refereed to
       also as receptive fields).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#my1_conv2d_tense2">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -198,11 +199,11 @@
         <span class="summary-sig-arg">k</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#myconv">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -213,15 +214,15 @@
         <tr>
           <td><span class="summary-sig"><a name="myconv_tense"></a><span class="summary-sig-name">myconv_tense</span>(<span class="summary-sig-arg">I</span>,
         <span class="summary-sig-arg">k</span>)</span><br />
-      Tensor vectorized  convolution calculation for bprop and fprop I is  
+      Tensor vectorized  convolution calculation for bprop and fprop I is
       a 3D tensor k is not</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#myconv_tense">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -236,11 +237,11 @@
       3D tensors</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#myconv_tense2">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 </table>
@@ -311,17 +312,17 @@
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#my1_conv2d">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Implements a 2d valid convolution of kernels with the image Note: 
-  filer means the same as kernel and convolution (correlation) of those 
+
+  <p>Implements a 2d valid convolution of kernels with the image Note:
+  filer means the same as kernel and convolution (correlation) of those
   with the input space produces feature maps (sometimes refereed to also as
-  receptive fields). Also note, that feature maps are synonyms here to 
+  receptive fields). Also note, that feature maps are synonyms here to
   channels, and as such num_inp_channels == num_inp_feat_maps :param image:
-  4D tensor of sizes (batch_size, num_input_channels, img_shape_x, 
-  img_shape_y) :param filters: 4D tensor of filters of size 
-  (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y) 
+  4D tensor of sizes (batch_size, num_input_channels, img_shape_x,
+  img_shape_y) :param filters: 4D tensor of filters of size
+  (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y)
   :param strides: a tuple (stride_x, stride_y), specifying the shift of the
-  kernels in x and y dimensions :return: 4D tensor of size (batch_size, 
+  kernels in x and y dimensions :return: 4D tensor of size (batch_size,
   num_out_feature_maps, feature_map_shape_x, feature_map_shape_y)</p>
   <dl class="fields">
   </dl>
@@ -343,17 +344,17 @@
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#my1_conv2d_tense">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Implements a 2d valid convolution of kernels with the image Note: 
-  filer means the same as kernel and convolution (correlation) of those 
+
+  <p>Implements a 2d valid convolution of kernels with the image Note:
+  filer means the same as kernel and convolution (correlation) of those
   with the input space produces feature maps (sometimes refereed to also as
-  receptive fields). Also note, that feature maps are synonyms here to 
+  receptive fields). Also note, that feature maps are synonyms here to
   channels, and as such num_inp_channels == num_inp_feat_maps :param image:
-  4D tensor of sizes (batch_size, num_input_channels, img_shape_x, 
-  img_shape_y) :param filters: 4D tensor of filters of size 
-  (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y) 
+  4D tensor of sizes (batch_size, num_input_channels, img_shape_x,
+  img_shape_y) :param filters: 4D tensor of filters of size
+  (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y)
   :param strides: a tuple (stride_x, stride_y), specifying the shift of the
-  kernels in x and y dimensions :return: 4D tensor of size (batch_size, 
+  kernels in x and y dimensions :return: 4D tensor of size (batch_size,
   num_out_feature_maps, feature_map_shape_x, feature_map_shape_y)</p>
   <dl class="fields">
   </dl>
@@ -375,17 +376,17 @@
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#my1_conv2d_tense2">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Implements a 2d valid convolution of kernels with the image Note: 
-  filer means the same as kernel and convolution (correlation) of those 
+
+  <p>Implements a 2d valid convolution of kernels with the image Note:
+  filer means the same as kernel and convolution (correlation) of those
   with the input space produces feature maps (sometimes refereed to also as
-  receptive fields). Also note, that feature maps are synonyms here to 
+  receptive fields). Also note, that feature maps are synonyms here to
   channels, and as such num_inp_channels == num_inp_feat_maps :param image:
-  4D tensor of sizes (batch_size, num_input_channels, img_shape_x, 
-  img_shape_y) :param filters: 4D tensor of filters of size 
-  (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y) 
+  4D tensor of sizes (batch_size, num_input_channels, img_shape_x,
+  img_shape_y) :param filters: 4D tensor of filters of size
+  (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y)
   :param strides: a tuple (stride_x, stride_y), specifying the shift of the
-  kernels in x and y dimensions :return: 4D tensor of size (batch_size, 
+  kernels in x and y dimensions :return: 4D tensor of size (batch_size,
   num_out_feature_maps, feature_map_shape_x, feature_map_shape_y)</p>
   <dl class="fields">
   </dl>
@@ -416,13 +417,13 @@
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">logger</h3>
-  <p>You have been given some very initial skeleton below. Feel free to 
+  <p>You have been given some very initial skeleton below. Feel free to
   build on top of it and/or modify it according to your needs. Just notice,
-  you can factor out the convolution code out of the layer code, and just 
-  pass (possibly) different conv implementations for each of the stages in 
-  the model where you are expected to apply the convolutional operator. 
-  This will allow you to keep the layer implementation independent of conv 
-  operator implementation, and you can easily swap it layer, for example, 
+  you can factor out the convolution code out of the layer code, and just
+  pass (possibly) different conv implementations for each of the stages in
+  the model where you are expected to apply the convolutional operator.
+  This will allow you to keep the layer implementation independent of conv
+  operator implementation, and you can easily swap it layer, for example,
   for more efficient implementation if you came up with one, etc.</p>
   <dl class="fields">
   </dl>
