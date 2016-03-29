@@ -120,27 +120,7 @@
 </div><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"> </tt>
 <a name="CECost.get_name"></a><div id="CECost.get_name-def"><a name="L63"></a><tt class="py-lineno">63</tt> <a class="py-toggle" href="#" id="CECost.get_name-toggle" onclick="return toggle('CECost.get_name');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="mlp.costs.CECost-class.html#get_name">get_name</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="CECost.get_name-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CECost.get_name-expanded"><a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">'ce'</tt> </tt>
-</div></div><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt>
-<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line"> </tt>
-<a name="CECostIm"></a><div id="CECostIm-def"><a name="L67"></a><tt class="py-lineno">67</tt> <a class="py-toggle" href="#" id="CECostIm-toggle" onclick="return toggle('CECostIm');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="mlp.costs.CECostIm-class.html">CECostIm</a><tt class="py-op">(</tt><tt class="py-base-class">Cost</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="CECostIm-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="CECostIm-expanded"><a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
-<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"><tt class="py-docstring">    Cross Entropy (Negative log-likelihood) cost for multiple classes</tt> </tt>
-<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"><tt class="py-docstring">    And complex weights</tt> </tt>
-<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
-<a name="CECostIm.cost"></a><div id="CECostIm.cost-def"><a name="L72"></a><tt class="py-lineno">72</tt> <a class="py-toggle" href="#" id="CECostIm.cost-toggle" onclick="return toggle('CECostIm.cost');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="mlp.costs.CECostIm-class.html#cost">cost</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">y</tt><tt class="py-op">,</tt> <tt class="py-param">t</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="CECostIm.cost-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CECostIm.cost-expanded"><a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">        <tt class="py-comment">#assumes t is 1-of-K coded and y is a softmax</tt> </tt>
-<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">        <tt class="py-comment">#transformed estimate at the output layer</tt> </tt>
-<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">        <tt class="py-name">nll</tt> <tt class="py-op">=</tt> <tt class="py-name">t</tt> <tt class="py-op">*</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">log</tt><tt class="py-op">(</tt><tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">abs</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
-<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">-</tt><tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">mean</tt><tt class="py-op">(</tt><tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">sum</tt><tt class="py-op">(</tt><tt class="py-name">nll</tt><tt class="py-op">,</tt> <tt class="py-name">axis</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
-</div><a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"> </tt>
-<a name="CECostIm.grad"></a><div id="CECostIm.grad-def"><a name="L78"></a><tt class="py-lineno">78</tt> <a class="py-toggle" href="#" id="CECostIm.grad-toggle" onclick="return toggle('CECostIm.grad');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="mlp.costs.CECostIm-class.html#grad">grad</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">y</tt><tt class="py-op">,</tt> <tt class="py-param">t</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="CECostIm.grad-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CECostIm.grad-expanded"><a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">        <tt class="py-comment">#assumes t is 1-of-K coded and y is a softmax</tt> </tt>
-<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">        <tt class="py-comment">#transformed estimate at the output layer</tt> </tt>
-<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">y</tt> <tt class="py-op">-</tt> <tt class="py-name">t</tt> </tt>
-</div><a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line"> </tt>
-<a name="CECostIm.get_name"></a><div id="CECostIm.get_name-def"><a name="L83"></a><tt class="py-lineno">83</tt> <a class="py-toggle" href="#" id="CECostIm.get_name-toggle" onclick="return toggle('CECostIm.get_name');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="mlp.costs.CECostIm-class.html#get_name">get_name</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="CECostIm.get_name-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CECostIm.get_name-expanded"><a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">'ceim'</tt> </tt>
-</div></div><a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+</div></div><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
 expandto(location.href);
 // -->
@@ -173,7 +153,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Mar 25 19:02:39 2016
+    Generated by Epydoc 3.0.1 on Tue Mar 29 01:41:00 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

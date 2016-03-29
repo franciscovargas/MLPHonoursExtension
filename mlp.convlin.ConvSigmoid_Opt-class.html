@@ -99,9 +99,9 @@
         <span class="summary-sig-arg">stride</span>=<span class="summary-sig-default"><code class="variable-group">(</code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>,
         <span class="summary-sig-arg">irange</span>=<span class="summary-sig-default">0.2</span>,
         <span class="summary-sig-arg">rng</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">conv_fwd</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x3e59050&gt;</span>,
-        <span class="summary-sig-arg">conv_bck</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x3e59050&gt;</span>,
-        <span class="summary-sig-arg">conv_grad</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x3e59050&gt;</span>)</span><br />
+        <span class="summary-sig-arg">conv_fwd</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>,
+        <span class="summary-sig-arg">conv_bck</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>,
+        <span class="summary-sig-arg">conv_grad</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>)</span><br />
       :param num_inp_feat_maps: int, a number of input feature maps 
       (channels) :param num_out_feat_maps: int, a number of output feature 
       maps (channels) :param image_shape: tuple, a shape of the image 
@@ -129,12 +129,8 @@
         <tr>
           <td><span class="summary-sig"><a href="mlp.convlin.ConvSigmoid_Opt-class.html#fprop" class="summary-sig-name">fprop</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">inputs</span>)</span><br />
-      Implements a forward propagation through the i-th layer, that is
-some form of:
-   a^i = xW^i + b^i
-   h^i = f^i(a^i)
-with f^i, W^i, b^i denoting a non-linearity, weight matrix and
-biases at the i-th layer, respectively and x denoting inputs.</td>
+      Forward propagation as in MLP only that replacing inner products with
+      convolution</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvSigmoid_Opt.fprop">source&nbsp;code</a></span>
             
@@ -153,7 +149,8 @@ biases at the i-th layer, respectively and x denoting inputs.</td>
           <td><span class="summary-sig"><a href="mlp.convlin.ConvSigmoid_Opt-class.html#bprop" class="summary-sig-name">bprop</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">h</span>,
         <span class="summary-sig-arg">igrads</span>)</span><br />
-      Implements a backward propagation through the layer, that is, given...</td>
+      Backwards propagation again similar to MLP only that not in the 
+      context of inner products but of convolutions</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvSigmoid_Opt.bprop">source&nbsp;code</a></span>
             
@@ -284,9 +281,9 @@ deals with the optimised cost (i.e.</td>
         <span class="sig-arg">stride</span>=<span class="sig-default"><code class="variable-group">(</code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>,
         <span class="sig-arg">irange</span>=<span class="sig-default">0.2</span>,
         <span class="sig-arg">rng</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">conv_fwd</span>=<span class="sig-default">&lt;function my1_conv2d at 0x3e59050&gt;</span>,
-        <span class="sig-arg">conv_bck</span>=<span class="sig-default">&lt;function my1_conv2d at 0x3e59050&gt;</span>,
-        <span class="sig-arg">conv_grad</span>=<span class="sig-default">&lt;function my1_conv2d at 0x3e59050&gt;</span>)</span>
+        <span class="sig-arg">conv_fwd</span>=<span class="sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>,
+        <span class="sig-arg">conv_bck</span>=<span class="sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>,
+        <span class="sig-arg">conv_grad</span>=<span class="sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -325,19 +322,8 @@ deals with the optimised cost (i.e.</td>
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-
-Implements a forward propagation through the i-th layer, that is
-some form of:
-   a^i = xW^i + b^i
-   h^i = f^i(a^i)
-with f^i, W^i, b^i denoting a non-linearity, weight matrix and
-biases at the i-th layer, respectively and x denoting inputs.
-
-:param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
-:return: h^i, matrix of transformed by layer features
-
-</pre>
+  <p>Forward propagation as in MLP only that replacing inner products with 
+  convolution</p>
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#fprop">layers.Layer.fprop</a>
@@ -362,22 +348,8 @@ biases at the i-th layer, respectively and x denoting inputs.
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-
-Implements a backward propagation through the layer, that is, given
-h^i denotes the output of the layer and x^i the input, we compute:
-dh^i/dx^i which by chain rule is dh^i/da^i da^i/dx^i
-x^i could be either features (x) or the output of the lower layer h^{i-1}
-:param h: it's an activation produced in forward pass
-:param igrads, error signal (or gradient) flowing to the layer, note,
-       this in general case does not corresponds to 'deltas' used to update
-       the layer's parameters, to get deltas ones need to multiply it with
-       the dh^i/da^i derivative
-:return: a tuple (deltas, ograds) where:
-       deltas = igrads * dh^i/da^i
-       ograds = deltas  imes da^i/dx^i
-
-</pre>
+  <p>Backwards propagation again similar to MLP only that not in the 
+  context of inner products but of convolutions</p>
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#bprop">layers.Layer.bprop</a>
@@ -410,14 +382,14 @@ deals with the optimised cost (i.e. the top layer)
 By default, method should implement a back-prop for default cost, that is
 the one that is natural to the layer's output, i.e.:
 linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entropy
-:param h: it's an activation produced in forward pass
+:param $h$: it's an activation produced in forward pass
 :param igrads, error signal (or gradient) flowing to the layer, note,
        this in general case does not corresponds to 'deltas' used to update
        the layer's parameters, to get deltas ones need to multiply it with
-       the dh^i/da^i derivative
+       the $\partial h^{i}/ \partial a^{i}$ derivative
 :return: a tuple (deltas, ograds) where:
-       deltas = igrads * dh^i/da^i
-       ograds = deltas  imes da^i/dx^i
+       $deltas = igrads * \partial h^{i}/ \partial a^{i}$
+       $ograds = deltas         imes \partial a^{i}/ \partial x^{i}$
 
 </pre>
   <dl class="fields">
@@ -477,7 +449,7 @@ linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entrop
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Mar 25 19:02:39 2016
+    Generated by Epydoc 3.0.1 on Tue Mar 29 01:41:00 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

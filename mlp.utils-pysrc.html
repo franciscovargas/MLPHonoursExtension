@@ -127,10 +127,7 @@
 <a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-op">)</tt> </tt>
 <a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"> </tt>
 <a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">grad_layer_wrapper</tt><tt class="py-op">(</tt><tt class="py-param">x</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method mlp.conv.ConvLinear_Opt.fprop()=mlp.conv.ConvLinear_Opt-class.html#fprop,Method mlp.conv.ConvRelu_Opt.fprop()=mlp.conv.ConvRelu_Opt-class.html#fprop,Method mlp.conv.ConvSigmoid_Opt.fprop()=mlp.conv.ConvSigmoid_Opt-class.html#fprop,Method mlp.convlin.ConvLinear_Opt.fprop()=mlp.convlin.ConvLinear_Opt-class.html#fprop,Method mlp.convlin.ConvMaxPool2D.fprop()=mlp.convlin.ConvMaxPool2D-class.html#fprop,Method mlp.convlin.ConvRelu_Opt.fprop()=mlp.convlin.ConvRelu_Opt-class.html#fprop,Method mlp.convlin.ConvSigmoid_Opt.fprop()=mlp.convlin.ConvSigmoid_Opt-class.html#fprop,Method mlp.layers.ComplexAbs.fprop()=mlp.layers.ComplexAbs-class.html#fprop,Method mlp.layers.ComplexLinear.fprop()=mlp.layers.ComplexLinear-class.html#fprop,Method mlp.layers.Layer.fprop()=mlp.layers.Layer-class.html#fprop,Method mlp.layers.Linear.fprop()=mlp.layers.Linear-class.html#fprop,Method mlp.layers.MLP.fprop()=mlp.layers.MLP-class.html#fprop,Method mlp.layers.Maxout.fprop()=mlp.layers.Maxout-class.html#fprop,Method mlp.layers.Relu.fprop()=mlp.layers.Relu-class.html#fprop,Method mlp.layers.Sigmoid.fprop()=mlp.layers.Sigmoid-class.html#fprop,Method mlp.layers.Softmax.fprop()=mlp.layers.Softmax-class.html#fprop,Method mlp.layers.Tanh.fprop()=mlp.layers.Tanh-class.html#fprop"><a title="mlp.conv.ConvLinear_Opt.fprop
-mlp.conv.ConvRelu_Opt.fprop
-mlp.conv.ConvSigmoid_Opt.fprop
-mlp.convlin.ConvLinear_Opt.fprop
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method mlp.convlin.ConvLinear_Opt.fprop()=mlp.convlin.ConvLinear_Opt-class.html#fprop,Method mlp.convlin.ConvMaxPool2D.fprop()=mlp.convlin.ConvMaxPool2D-class.html#fprop,Method mlp.convlin.ConvRelu_Opt.fprop()=mlp.convlin.ConvRelu_Opt-class.html#fprop,Method mlp.convlin.ConvSigmoid_Opt.fprop()=mlp.convlin.ConvSigmoid_Opt-class.html#fprop,Method mlp.layers.ComplexAbs.fprop()=mlp.layers.ComplexAbs-class.html#fprop,Method mlp.layers.ComplexLinear.fprop()=mlp.layers.ComplexLinear-class.html#fprop,Method mlp.layers.Layer.fprop()=mlp.layers.Layer-class.html#fprop,Method mlp.layers.Linear.fprop()=mlp.layers.Linear-class.html#fprop,Method mlp.layers.MLP.fprop()=mlp.layers.MLP-class.html#fprop,Method mlp.layers.Maxout.fprop()=mlp.layers.Maxout-class.html#fprop,Method mlp.layers.Relu.fprop()=mlp.layers.Relu-class.html#fprop,Method mlp.layers.Sigmoid.fprop()=mlp.layers.Sigmoid-class.html#fprop,Method mlp.layers.Softmax.fprop()=mlp.layers.Softmax-class.html#fprop,Method mlp.layers.Tanh.fprop()=mlp.layers.Tanh-class.html#fprop"><a title="mlp.convlin.ConvLinear_Opt.fprop
 mlp.convlin.ConvMaxPool2D.fprop
 mlp.convlin.ConvRelu_Opt.fprop
 mlp.convlin.ConvSigmoid_Opt.fprop
@@ -144,10 +141,7 @@ mlp.layers.Relu.fprop
 mlp.layers.Sigmoid.fprop
 mlp.layers.Softmax.fprop
 mlp.layers.Tanh.fprop" class="py-name" href="#" onclick="return doclink('link-5', 'fprop', 'link-5');">fprop</a></tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">)</tt> </tt>
-<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-name">deltas</tt><tt class="py-op">,</tt> <tt class="py-name">ograds</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method mlp.conv.ConvLinear_Opt.bprop()=mlp.conv.ConvLinear_Opt-class.html#bprop,Method mlp.conv.ConvRelu_Opt.bprop()=mlp.conv.ConvRelu_Opt-class.html#bprop,Method mlp.conv.ConvSigmoid_Opt.bprop()=mlp.conv.ConvSigmoid_Opt-class.html#bprop,Method mlp.convlin.ConvLinear_Opt.bprop()=mlp.convlin.ConvLinear_Opt-class.html#bprop,Method mlp.convlin.ConvMaxPool2D.bprop()=mlp.convlin.ConvMaxPool2D-class.html#bprop,Method mlp.convlin.ConvRelu_Opt.bprop()=mlp.convlin.ConvRelu_Opt-class.html#bprop,Method mlp.convlin.ConvSigmoid_Opt.bprop()=mlp.convlin.ConvSigmoid_Opt-class.html#bprop,Method mlp.layers.ComplexAbs.bprop()=mlp.layers.ComplexAbs-class.html#bprop,Method mlp.layers.ComplexLinear.bprop()=mlp.layers.ComplexLinear-class.html#bprop,Method mlp.layers.Layer.bprop()=mlp.layers.Layer-class.html#bprop,Method mlp.layers.Linear.bprop()=mlp.layers.Linear-class.html#bprop,Method mlp.layers.MLP.bprop()=mlp.layers.MLP-class.html#bprop,Method mlp.layers.Maxout.bprop()=mlp.layers.Maxout-class.html#bprop,Method mlp.layers.Relu.bprop()=mlp.layers.Relu-class.html#bprop,Method mlp.layers.Sigmoid.bprop()=mlp.layers.Sigmoid-class.html#bprop,Method mlp.layers.Softmax.bprop()=mlp.layers.Softmax-class.html#bprop,Method mlp.layers.Tanh.bprop()=mlp.layers.Tanh-class.html#bprop"><a title="mlp.conv.ConvLinear_Opt.bprop
-mlp.conv.ConvRelu_Opt.bprop
-mlp.conv.ConvSigmoid_Opt.bprop
-mlp.convlin.ConvLinear_Opt.bprop
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-name">deltas</tt><tt class="py-op">,</tt> <tt class="py-name">ograds</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method mlp.convlin.ConvLinear_Opt.bprop()=mlp.convlin.ConvLinear_Opt-class.html#bprop,Method mlp.convlin.ConvMaxPool2D.bprop()=mlp.convlin.ConvMaxPool2D-class.html#bprop,Method mlp.convlin.ConvRelu_Opt.bprop()=mlp.convlin.ConvRelu_Opt-class.html#bprop,Method mlp.convlin.ConvSigmoid_Opt.bprop()=mlp.convlin.ConvSigmoid_Opt-class.html#bprop,Method mlp.layers.ComplexAbs.bprop()=mlp.layers.ComplexAbs-class.html#bprop,Method mlp.layers.ComplexLinear.bprop()=mlp.layers.ComplexLinear-class.html#bprop,Method mlp.layers.Layer.bprop()=mlp.layers.Layer-class.html#bprop,Method mlp.layers.Linear.bprop()=mlp.layers.Linear-class.html#bprop,Method mlp.layers.MLP.bprop()=mlp.layers.MLP-class.html#bprop,Method mlp.layers.Maxout.bprop()=mlp.layers.Maxout-class.html#bprop,Method mlp.layers.Relu.bprop()=mlp.layers.Relu-class.html#bprop,Method mlp.layers.Sigmoid.bprop()=mlp.layers.Sigmoid-class.html#bprop,Method mlp.layers.Softmax.bprop()=mlp.layers.Softmax-class.html#bprop,Method mlp.layers.Tanh.bprop()=mlp.layers.Tanh-class.html#bprop"><a title="mlp.convlin.ConvLinear_Opt.bprop
 mlp.convlin.ConvMaxPool2D.bprop
 mlp.convlin.ConvRelu_Opt.bprop
 mlp.convlin.ConvSigmoid_Opt.bprop
@@ -233,30 +227,24 @@ mlp.layers.Tanh.bprop" class="py-name" href="#" onclick="return doclink('link-6'
 <a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">         <tt class="py-op">[</tt> <tt class="py-number">2321.</tt><tt class="py-op">,</tt>  <tt class="py-number">2339.</tt><tt class="py-op">,</tt>  <tt class="py-number">2357.</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
 <a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">         <tt class="py-op">[</tt> <tt class="py-number">2393.</tt><tt class="py-op">,</tt>  <tt class="py-number">2411.</tt><tt class="py-op">,</tt>  <tt class="py-number">2429.</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">dtype</tt><tt class="py-op">=</tt><tt class="py-name">dtype</tt><tt class="py-op">)</tt> </tt>
 <a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
-<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">        <tt class="py-name">orig_params</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method mlp.conv.ConvLinear_Opt.get_params()=mlp.conv.ConvLinear_Opt-class.html#get_params,Method mlp.convlin.ConvLinear_Opt.get_params()=mlp.convlin.ConvLinear_Opt-class.html#get_params,Method mlp.convlin.ConvMaxPool2D.get_params()=mlp.convlin.ConvMaxPool2D-class.html#get_params,Method mlp.layers.ComplexLinear.get_params()=mlp.layers.ComplexLinear-class.html#get_params,Method mlp.layers.Layer.get_params()=mlp.layers.Layer-class.html#get_params,Method mlp.layers.Linear.get_params()=mlp.layers.Linear-class.html#get_params"><a title="mlp.conv.ConvLinear_Opt.get_params
-mlp.convlin.ConvLinear_Opt.get_params
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">        <tt class="py-name">orig_params</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method mlp.convlin.ConvLinear_Opt.get_params()=mlp.convlin.ConvLinear_Opt-class.html#get_params,Method mlp.convlin.ConvMaxPool2D.get_params()=mlp.convlin.ConvMaxPool2D-class.html#get_params,Method mlp.layers.ComplexLinear.get_params()=mlp.layers.ComplexLinear-class.html#get_params,Method mlp.layers.Layer.get_params()=mlp.layers.Layer-class.html#get_params,Method mlp.layers.Linear.get_params()=mlp.layers.Linear-class.html#get_params"><a title="mlp.convlin.ConvLinear_Opt.get_params
 mlp.convlin.ConvMaxPool2D.get_params
 mlp.layers.ComplexLinear.get_params
 mlp.layers.Layer.get_params
 mlp.layers.Linear.get_params" class="py-name" href="#" onclick="return doclink('link-8', 'get_params', 'link-8');">get_params</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">kernels_first</tt><tt class="py-op">:</tt> </tt>
-<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method mlp.conv.ConvLinear_Opt.set_params()=mlp.conv.ConvLinear_Opt-class.html#set_params,Method mlp.convlin.ConvLinear_Opt.set_params()=mlp.convlin.ConvLinear_Opt-class.html#set_params,Method mlp.convlin.ConvMaxPool2D.set_params()=mlp.convlin.ConvMaxPool2D-class.html#set_params,Method mlp.layers.ComplexLinear.set_params()=mlp.layers.ComplexLinear-class.html#set_params,Method mlp.layers.Layer.set_params()=mlp.layers.Layer-class.html#set_params,Method mlp.layers.Linear.set_params()=mlp.layers.Linear-class.html#set_params"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method mlp.convlin.ConvLinear_Opt.set_params()=mlp.convlin.ConvLinear_Opt-class.html#set_params,Method mlp.convlin.ConvMaxPool2D.set_params()=mlp.convlin.ConvMaxPool2D-class.html#set_params,Method mlp.layers.ComplexLinear.set_params()=mlp.layers.ComplexLinear-class.html#set_params,Method mlp.layers.Layer.set_params()=mlp.layers.Layer-class.html#set_params,Method mlp.layers.Linear.set_params()=mlp.layers.Linear-class.html#set_params"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
 mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('link-9', 'set_params', 'link-9');">set_params</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">kernels</tt><tt class="py-op">,</tt> <tt class="py-name">biases</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
 <a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
-<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
 mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('link-10', 'set_params', 'link-9');">set_params</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">biases</tt><tt class="py-op">,</tt> <tt class="py-name">kernels</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
-<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">        <tt class="py-name">layer_output</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="mlp.conv.ConvLinear_Opt.fprop
-mlp.conv.ConvRelu_Opt.fprop
-mlp.conv.ConvSigmoid_Opt.fprop
-mlp.convlin.ConvLinear_Opt.fprop
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">        <tt class="py-name">layer_output</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.fprop
 mlp.convlin.ConvMaxPool2D.fprop
 mlp.convlin.ConvRelu_Opt.fprop
 mlp.convlin.ConvSigmoid_Opt.fprop
@@ -281,8 +269,7 @@ mlp.layers.Tanh.fprop" class="py-name" href="#" onclick="return doclink('link-11
 <a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">            <tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">true_output</tt><tt class="py-op">,</tt> <tt class="py-name">layer_output</tt><tt class="py-op">)</tt> </tt>
 <a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-op">)</tt> </tt>
 <a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">    <tt class="py-keyword">finally</tt><tt class="py-op">:</tt> </tt>
-<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
@@ -368,30 +355,24 @@ mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('
 <a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">         <tt class="py-op">[</tt> <tt class="py-number">226.</tt><tt class="py-op">,</tt>  <tt class="py-number">508.</tt><tt class="py-op">,</tt>  <tt class="py-number">568.</tt><tt class="py-op">,</tt>  <tt class="py-number">318.</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
 <a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">         <tt class="py-op">[</tt> <tt class="py-number">154.</tt><tt class="py-op">,</tt>  <tt class="py-number">341.</tt><tt class="py-op">,</tt>  <tt class="py-number">375.</tt><tt class="py-op">,</tt>  <tt class="py-number">207.</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">dtype</tt><tt class="py-op">=</tt><tt class="py-name">dtype</tt><tt class="py-op">)</tt> </tt>
 <a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
-<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-name">orig_params</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="mlp.conv.ConvLinear_Opt.get_params
-mlp.convlin.ConvLinear_Opt.get_params
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-name">orig_params</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.get_params
 mlp.convlin.ConvMaxPool2D.get_params
 mlp.layers.ComplexLinear.get_params
 mlp.layers.Layer.get_params
 mlp.layers.Linear.get_params" class="py-name" href="#" onclick="return doclink('link-13', 'get_params', 'link-8');">get_params</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">kernels_first</tt><tt class="py-op">:</tt> </tt>
-<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
 mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('link-14', 'set_params', 'link-9');">set_params</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">kernels</tt><tt class="py-op">,</tt> <tt class="py-name">biases</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
 <a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
-<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
 mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('link-15', 'set_params', 'link-9');">set_params</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">biases</tt><tt class="py-op">,</tt> <tt class="py-name">kernels</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
-<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">        <tt class="py-name">layer_deltas</tt><tt class="py-op">,</tt> <tt class="py-name">layer_ograds</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="mlp.conv.ConvLinear_Opt.bprop
-mlp.conv.ConvRelu_Opt.bprop
-mlp.conv.ConvSigmoid_Opt.bprop
-mlp.convlin.ConvLinear_Opt.bprop
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">        <tt class="py-name">layer_deltas</tt><tt class="py-op">,</tt> <tt class="py-name">layer_ograds</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.bprop
 mlp.convlin.ConvMaxPool2D.bprop
 mlp.convlin.ConvRelu_Opt.bprop
 mlp.convlin.ConvSigmoid_Opt.bprop
@@ -426,8 +407,7 @@ mlp.layers.Tanh.bprop" class="py-name" href="#" onclick="return doclink('link-16
 <a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">            <tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">true_ograds</tt><tt class="py-op">,</tt> <tt class="py-name">layer_ograds</tt><tt class="py-op">)</tt> </tt>
 <a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">        <tt class="py-op">)</tt> </tt>
 <a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">    <tt class="py-keyword">finally</tt><tt class="py-op">:</tt> </tt>
-<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">        <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">        <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
@@ -503,31 +483,26 @@ mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('
 <a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">'kernel_order must be one of "ioxy" and "oixy"'</tt><tt class="py-op">)</tt> </tt>
 <a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line">    <tt class="py-name">true_bias_grads</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">array</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">126.</tt><tt class="py-op">,</tt>   <tt class="py-number">36.</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">dtype</tt><tt class="py-op">=</tt><tt class="py-name">dtype</tt><tt class="py-op">)</tt> </tt>
 <a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
-<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">        <tt class="py-name">orig_params</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="mlp.conv.ConvLinear_Opt.get_params
-mlp.convlin.ConvLinear_Opt.get_params
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">        <tt class="py-name">orig_params</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.get_params
 mlp.convlin.ConvMaxPool2D.get_params
 mlp.layers.ComplexLinear.get_params
 mlp.layers.Layer.get_params
 mlp.layers.Linear.get_params" class="py-name" href="#" onclick="return doclink('link-18', 'get_params', 'link-8');">get_params</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">kernels_first</tt><tt class="py-op">:</tt> </tt>
-<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
 mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('link-19', 'set_params', 'link-9');">set_params</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">kernels</tt><tt class="py-op">,</tt> <tt class="py-name">biases</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
 <a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
-<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">            <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
 mlp.layers.Linear.set_params" class="py-name" href="#" onclick="return doclink('link-20', 'set_params', 'link-9');">set_params</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">biases</tt><tt class="py-op">,</tt> <tt class="py-name">kernels</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
-<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">        <tt class="py-name">layer_kernel_grads</tt><tt class="py-op">,</tt> <tt class="py-name">layer_bias_grads</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method mlp.conv.ConvLinear_Opt.pgrads()=mlp.conv.ConvLinear_Opt-class.html#pgrads,Method mlp.convlin.ConvLinear_Opt.pgrads()=mlp.convlin.ConvLinear_Opt-class.html#pgrads,Method mlp.convlin.ConvMaxPool2D.pgrads()=mlp.convlin.ConvMaxPool2D-class.html#pgrads,Method mlp.layers.ComplexAbs.pgrads()=mlp.layers.ComplexAbs-class.html#pgrads,Method mlp.layers.ComplexLinear.pgrads()=mlp.layers.ComplexLinear-class.html#pgrads,Method mlp.layers.Layer.pgrads()=mlp.layers.Layer-class.html#pgrads,Method mlp.layers.Linear.pgrads()=mlp.layers.Linear-class.html#pgrads"><a title="mlp.conv.ConvLinear_Opt.pgrads
-mlp.convlin.ConvLinear_Opt.pgrads
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">        <tt class="py-name">layer_kernel_grads</tt><tt class="py-op">,</tt> <tt class="py-name">layer_bias_grads</tt> <tt class="py-op">=</tt> <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method mlp.convlin.ConvLinear_Opt.pgrads()=mlp.convlin.ConvLinear_Opt-class.html#pgrads,Method mlp.convlin.ConvMaxPool2D.pgrads()=mlp.convlin.ConvMaxPool2D-class.html#pgrads,Method mlp.layers.ComplexAbs.pgrads()=mlp.layers.ComplexAbs-class.html#pgrads,Method mlp.layers.Layer.pgrads()=mlp.layers.Layer-class.html#pgrads,Method mlp.layers.Linear.pgrads()=mlp.layers.Linear-class.html#pgrads"><a title="mlp.convlin.ConvLinear_Opt.pgrads
 mlp.convlin.ConvMaxPool2D.pgrads
 mlp.layers.ComplexAbs.pgrads
-mlp.layers.ComplexLinear.pgrads
 mlp.layers.Layer.pgrads
 mlp.layers.Linear.pgrads" class="py-name" href="#" onclick="return doclink('link-21', 'pgrads', 'link-21');">pgrads</a></tt><tt class="py-op">(</tt><tt class="py-name">inputs</tt><tt class="py-op">,</tt> <tt class="py-name">deltas</tt><tt class="py-op">)</tt> </tt>
 <a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">layer_kernel_grads</tt><tt class="py-op">.</tt><tt class="py-name">shape</tt> <tt class="py-op">==</tt> <tt class="py-name">true_kernel_grads</tt><tt class="py-op">.</tt><tt class="py-name">shape</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt> </tt>
@@ -551,8 +526,7 @@ mlp.layers.Linear.pgrads" class="py-name" href="#" onclick="return doclink('link
 <a name="L368"></a><tt class="py-lineno">368</tt>  <tt class="py-line">            <tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">true_bias_grads</tt><tt class="py-op">,</tt> <tt class="py-name">layer_bias_grads</tt><tt class="py-op">)</tt> </tt>
 <a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line">        <tt class="py-op">)</tt> </tt>
 <a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line">    <tt class="py-keyword">finally</tt><tt class="py-op">:</tt> </tt>
-<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line">        <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="mlp.conv.ConvLinear_Opt.set_params
-mlp.convlin.ConvLinear_Opt.set_params
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line">        <tt class="py-name">layer</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="mlp.convlin.ConvLinear_Opt.set_params
 mlp.convlin.ConvMaxPool2D.set_params
 mlp.layers.ComplexLinear.set_params
 mlp.layers.Layer.set_params
@@ -591,7 +565,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Mar 25 19:02:39 2016
+    Generated by Epydoc 3.0.1 on Tue Mar 29 01:41:00 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

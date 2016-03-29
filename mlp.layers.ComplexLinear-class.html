@@ -72,6 +72,9 @@ object --+
 </dd></dl>
 
 <hr />
+<p>This layer sets up the two weight matrices required for the ADFT layer
+  implemented as compelx abs</p>
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -118,7 +121,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="norm_weights"></a><span class="summary-sig-name">norm_weights</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">train_iterator</span>)</span><br />
-      Normalize dft weights by E[(wx)^2]</td>
+      Normalize dft weights by $E[(wx)^2]$</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#ComplexLinear.norm_weights">source&nbsp;code</a></span>
             
@@ -138,9 +141,9 @@ object --+
         <span class="summary-sig-arg">inputs</span>)</span><br />
       Implements a forward propagation through the i-th layer, that is
 some form of:
-   a^i = xW^i + b^i
-   h^i = f^i(a^i)
-with f^i, W^i, b^i denoting a non-linearity, weight matrix and
+   $a^{i} = xW^{i} + b^{i}$
+   $h^{i} = f^{i}(a^{i})$
+with f^{i}, W^{i}, b^{i} denoting a non-linearity, weight matrix and
 biases at the i-th layer, respectively and x denoting inputs.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#ComplexLinear.fprop">source&nbsp;code</a></span>
@@ -184,27 +187,6 @@ biases at the i-th layer, respectively and x denoting inputs.</td>
 deals with the optimised cost (i.e.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#ComplexLinear.bprop_cost">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="mlp.layers.ComplexLinear-class.html#pgrads" class="summary-sig-name">pgrads</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">inputs</span>,
-        <span class="summary-sig-arg">deltas</span>,
-        <span class="summary-sig-arg">l1_weight</span>=<span class="summary-sig-default">0</span>,
-        <span class="summary-sig-arg">l2_weight</span>=<span class="summary-sig-default">0</span>)</span><br />
-      Return gradients w.r.t parameters</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="mlp.layers-pysrc.html#ComplexLinear.pgrads">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -263,6 +245,9 @@ deals with the optimised cost (i.e.</td>
   </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="mlp.layers.Layer-class.html">Layer</a></code></b>:
+      <code><a href="mlp.layers.Layer-class.html#pgrads">pgrads</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
@@ -370,13 +355,13 @@ deals with the optimised cost (i.e.</td>
 
 Implements a forward propagation through the i-th layer, that is
 some form of:
-   a^i = xW^i + b^i
-   h^i = f^i(a^i)
-with f^i, W^i, b^i denoting a non-linearity, weight matrix and
+   $a^{i} = xW^{i} + b^{i}$
+   $h^{i} = f^{i}(a^{i})$
+with f^{i}, W^{i}, b^{i} denoting a non-linearity, weight matrix and
 biases at the i-th layer, respectively and x denoting inputs.
 
-:param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
-:return: h^i, matrix of transformed by layer features
+:param inputs: matrix of features $(x)$ or the output of the previous layer $h^{i-1}$
+:return: $h^i$, matrix of transformed by layer features
 
 </pre>
   <dl class="fields">
@@ -406,17 +391,17 @@ biases at the i-th layer, respectively and x denoting inputs.
   <pre class="literalblock">
 
 Implements a backward propagation through the layer, that is, given
-h^i denotes the output of the layer and x^i the input, we compute:
-dh^i/dx^i which by chain rule is dh^i/da^i da^i/dx^i
-x^i could be either features (x) or the output of the lower layer h^{i-1}
+$h^i$ denotes the output of the layer and $x^i$ the input, we compute:
+$dh^i/dx^i$ which by chain rule is $dh^i/da^i da^i/dx^i$
+$x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
 :param h: it's an activation produced in forward pass
 :param igrads, error signal (or gradient) flowing to the layer, note,
        this in general case does not corresponds to 'deltas' used to update
        the layer's parameters, to get deltas ones need to multiply it with
-       the dh^i/da^i derivative
+       the $\partial h^{i}/ \partial a^{i}$ derivative
 :return: a tuple (deltas, ograds) where:
-       deltas = igrads * dh^i/da^i
-       ograds = deltas  imes da^i/dx^i
+       $deltas = igrads *  \partial h^{i}/ \partial a^{i}$
+       $ograds = deltas         imes \partial a^{i}/ \partial x^{i}$
 
 </pre>
   <dl class="fields">
@@ -451,46 +436,19 @@ deals with the optimised cost (i.e. the top layer)
 By default, method should implement a back-prop for default cost, that is
 the one that is natural to the layer's output, i.e.:
 linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entropy
-:param h: it's an activation produced in forward pass
+:param $h$: it's an activation produced in forward pass
 :param igrads, error signal (or gradient) flowing to the layer, note,
        this in general case does not corresponds to 'deltas' used to update
        the layer's parameters, to get deltas ones need to multiply it with
-       the dh^i/da^i derivative
+       the $\partial h^{i}/ \partial a^{i}$ derivative
 :return: a tuple (deltas, ograds) where:
-       deltas = igrads * dh^i/da^i
-       ograds = deltas  imes da^i/dx^i
+       $deltas = igrads * \partial h^{i}/ \partial a^{i}$
+       $ograds = deltas         imes \partial a^{i}/ \partial x^{i}$
 
 </pre>
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#bprop_cost">Layer.bprop_cost</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="pgrads"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">pgrads</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">inputs</span>,
-        <span class="sig-arg">deltas</span>,
-        <span class="sig-arg">l1_weight</span>=<span class="sig-default">0</span>,
-        <span class="sig-arg">l2_weight</span>=<span class="sig-default">0</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="mlp.layers-pysrc.html#ComplexLinear.pgrads">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Return gradients w.r.t parameters</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="mlp.layers.Layer-class.html#pgrads">Layer.pgrads</a>
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
@@ -590,7 +548,7 @@ linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entrop
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Mar 25 19:02:39 2016
+    Generated by Epydoc 3.0.1 on Tue Mar 29 01:41:00 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
