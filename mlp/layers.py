@@ -223,30 +223,30 @@ class Layer(object):
         """
         Implements a forward propagation through the i-th layer, that is
         some form of:
-           a^i = xW^i + b^i
-           h^i = f^i(a^i)
-        with f^i, W^i, b^i denoting a non-linearity, weight matrix and
+           $a^{i} = xW^{i} + b^{i}$
+           $h^{i} = f^{i}(a^{i})$
+        with f^{i}, W^{i}, b^{i} denoting a non-linearity, weight matrix and
         biases at the i-th layer, respectively and x denoting inputs.
 
-        :param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
-        :return: h^i, matrix of transformed by layer features
+        :param inputs: matrix of features $(x)$ or the output of the previous layer $h^{i-1}$
+        :return: $h^i$, matrix of transformed by layer features
         """
         raise NotImplementedError()
 
     def bprop(self, h, igrads):
         """
         Implements a backward propagation through the layer, that is, given
-        h^i denotes the output of the layer and x^i the input, we compute:
-        dh^i/dx^i which by chain rule is dh^i/da^i da^i/dx^i
-        x^i could be either features (x) or the output of the lower layer h^{i-1}
+        $h^i$ denotes the output of the layer and $x^i$ the input, we compute:
+        $dh^i/dx^i$ which by chain rule is $dh^i/da^i da^i/dx^i$
+        $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
         :param h: it's an activation produced in forward pass
         :param igrads, error signal (or gradient) flowing to the layer, note,
                this in general case does not corresponds to 'deltas' used to update
                the layer's parameters, to get deltas ones need to multiply it with
-               the dh^i/da^i derivative
+               the $\partial h^{i}/ \partial a^{i}$ derivative
         :return: a tuple (deltas, ograds) where:
-               deltas = igrads * dh^i/da^i
-               ograds = deltas \times da^i/dx^i
+               $deltas = igrads *  \partial h^{i}/ \partial a^{i}$
+               $ograds = deltas \times \partial a^{i}/ \partial x^{i}$
         """
         raise NotImplementedError()
 
@@ -257,14 +257,14 @@ class Layer(object):
         By default, method should implement a back-prop for default cost, that is
         the one that is natural to the layer's output, i.e.:
         linear -> mse, softmax -> cross-entropy, sigmoid -> binary cross-entropy
-        :param h: it's an activation produced in forward pass
+        :param $h$: it's an activation produced in forward pass
         :param igrads, error signal (or gradient) flowing to the layer, note,
                this in general case does not corresponds to 'deltas' used to update
                the layer's parameters, to get deltas ones need to multiply it with
-               the dh^i/da^i derivative
+               the $\partial h^{i}/ \partial a^{i}$ derivative
         :return: a tuple (deltas, ograds) where:
-               deltas = igrads * dh^i/da^i
-               ograds = deltas \times da^i/dx^i
+               $deltas = igrads * \partial h^{i}/ \partial a^{i}$
+               $ograds = deltas \times \partial a^{i}/ \partial x^{i}$
         """
 
         raise NotImplementedError()
@@ -307,13 +307,13 @@ class Linear(Layer):
         """
         Implements a forward propagation through the i-th layer, that is
         some form of:
-           a^i = xW^i + b^i
-           h^i = f^i(a^i)
-        with f^i, W^i, b^i denoting a non-linearity, weight matrix and
-        biases of this (i-th) layer, respectively and x denoting inputs.
+           $a^{i} = xW^{i} + b^{i}$
+           $h^{i} = f^{i}(a^{i})$
+        with $f^{i}, W^{i}, b^{i}$ denoting a non-linearity, weight matrix and
+        biases of this (i-th) layer, respectively and $x$ denoting inputs.
 
-        :param inputs: matrix of features (x) or the output of the previous layer h^{i-1}
-        :return: h^i, matrix of transformed by layer features
+        :param inputs: matrix of features $(x)$ or the output of the previous layer $h^{i-1}$
+        :return: $h^i$, matrix of transformed by layer features
         """
 
         # input comes from 4D convolutional tensor, reshape to expected shape
@@ -328,20 +328,20 @@ class Linear(Layer):
     def bprop(self, h, igrads):
         """
         Implements a backward propagation through the layer, that is, given
-        h^i denotes the output of the layer and x^i the input, we compute:
-        dh^i/dx^i which by chain rule is dh^i/da^i da^i/dx^i
-        x^i could be either features (x) or the output of the lower layer h^{i-1}
+        $h^i$ denotes the output of the layer and $x^i$ the input, we compute:
+        $dh^i/dx^i$ which by chain rule is $dh^i/da^i da^i/dx^i$
+        $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
         :param h: it's an activation produced in forward pass
         :param igrads, error signal (or gradient) flowing to the layer, note,
                this in general case does not corresponds to 'deltas' used to update
                the layer's parameters, to get deltas ones need to multiply it with
-               the dh^i/da^i derivative
+               the $\partial h^{i}/ \partial a^{i}$ derivative
         :return: a tuple (deltas, ograds) where:
-               deltas = igrads * dh^i/da^i
-               ograds = deltas \times da^i/dx^i
+               $deltas = igrads *  \partial h^{i}/ \partial a^{i}$
+               $ograds = deltas \times \partial a^{i}/ \partial x^{i}$
         """
 
-        # since df^i/da^i = 1 (f is assumed identity function),
+        # since $df^i/da^i = 1$  (f is assumed identity function),
         # deltas are in fact the same as igrads
         # print igrads.shape
         if igrads.ndim >2:
@@ -354,18 +354,17 @@ class Linear(Layer):
         """
         Implements a backward propagation in case the layer directly
         deals with the optimised cost (i.e. the top layer)
-        By default, method should implement a bprop for default cost, that is
+        By default, method should implement a back-prop for default cost, that is
         the one that is natural to the layer's output, i.e.:
-        here we implement linear -> mse scenario
-        :param h: it's an activation produced in forward pass
+        linear -> mse, softmax -> cross-entropy, sigmoid -> binary cross-entropy
+        :param $h$: it's an activation produced in forward pass
         :param igrads, error signal (or gradient) flowing to the layer, note,
                this in general case does not corresponds to 'deltas' used to update
                the layer's parameters, to get deltas ones need to multiply it with
-               the dh^i/da^i derivative
-        :param cost, mlp.costs.Cost instance defining the used cost
+               the $\partial h^{i}/ \partial a^{i}$ derivative
         :return: a tuple (deltas, ograds) where:
-               deltas = igrads * dh^i/da^i
-               ograds = deltas \times da^i/dx^i
+               $deltas = igrads * \partial h^{i}/ \partial a^{i}$
+               $ograds = deltas \times \partial a^{i}/ \partial x^{i}$
         """
 
         if cost is None or cost.get_name() == 'mse':
@@ -388,9 +387,9 @@ class Linear(Layer):
 
         Note: deltas here contain the whole chain rule leading
         from the cost up to the the i-th layer, i.e.
-        dE/dy^L dy^L/da^L da^L/dh^{L-1} dh^{L-1}/da^{L-1} ... dh^{i}/da^{i}
+        $\partial E/\partial y^{L}  \partial y^{L}/ \partial a^{L} \partial a^{L}/ \partial h^{L-1} \partial h^{L-1}/ \partial a^{L-1} ... \partial h^{i}/ \partial a^{i}$
         and here we are just asking about
-          1) da^i/dW^i and 2) da^i/db^i
+          1) $\partial a^{i}/ \partial W^{i}$ and 2) $\partial a^{i}/ \partial b^{i}$
         since W and b are only layer's parameters
         """
 
@@ -441,7 +440,7 @@ class Sigmoid(Linear):
         a = super(Sigmoid, self).fprop(inputs)
         # stabilise the exp() computation in case some values in
         #'a' get very negative. We limit both tails, however only
-        # negative values may lead to numerical issues -- exp(-a)
+        # negative values may lead to numerical issues -- $e^{-a}$
         # clip() function does the following operation faster:
         # a[a < -30.] = -30,
         # a[a > 30.] = 30.
@@ -620,6 +619,10 @@ class Maxout(Linear):
 
 
 class ComplexLinear(Layer):
+    """
+    This layer sets up the two weight matrices required for the ADFT layer
+    implemented as compelx abs
+    """
 
     def __init__(self, idim, odim,
                  rng=None,
@@ -647,7 +650,7 @@ class ComplexLinear(Layer):
 
     def norm_weights(self, train_iterator):
         """
-        Normalize dft weights by E[(wx)^2]
+        Normalize dft weights by $E[(wx)^2]$
         """
         n = 1
         for inputs, t in train_iterator:
@@ -702,39 +705,6 @@ class ComplexLinear(Layer):
             raise NotImplementedError('Linear.bprop_cost method not implemented '
                                       'for the %s cost' % cost.get_name())
 
-    def pgrads(self, inputs, deltas, l1_weight=0, l2_weight=0):
-
-        # input comes from 4D convolutional tensor, reshape to expected shape
-        # if inputs.ndim == 4:
-        #     inputs = inputs.reshape(inputs.shape[0], -1)
-
-        # you could basically use different scalers for biases
-        # and weights, but it is not implemented here like this
-        l2_W_penalty, l2_b_penalty = 0, 0
-        if l2_weight > 0:
-            l2_W_penalty = l2_weight*self.W
-            l2_b_penalty = l2_weight*self.b
-
-        l1_W_penalty, l1_b_penalty = 0, 0
-        if l1_weight > 0:
-            l1_W_penalty = l1_weight*numpy.sign(self.W)
-            l1_b_penalty = l1_weight*numpy.sign(self.b)
-
-        # term1 = numpy.dot(inputs, self.W)
-        # term2 = numpy.conj(term1)
-        # print deltas.shape
-        ir = deltas[:, ::2, :].reshape(100, -1)
-        ii = deltas[:, 1::2, :].reshape(100, -1)
-        # deltas = ir + 1j*ii
-        # deltas = deltas.reshape(100,-1)
-        # print deltas.shape
-
-        grad_Wr = numpy.dot(inputs.T, ir)
-        grad_Wi = numpy.dot(inputs.T, ii)
-        grad_b = numpy.sum(numpy.abs(deltas), axis=0) + \
-            l2_b_penalty + l1_b_penalty
-
-        return [grad_Wr, grad_Wi, grad_b.ravel()]
 
     def get_params(self):
         return [self.Wr, self.Wi, self.b]
@@ -751,18 +721,21 @@ class ComplexLinear(Layer):
 
 class ComplexAbs(ComplexLinear):
 
+    """
+    Implements an ADFT (Spectral layer) with $|a|^{2}$ based
+    activation functions.
+    """
+
     def __init__(self,  idim, odim,
                  rng=None,
                  irange=0.1):
 
         super(ComplexAbs, self).__init__(idim, odim, rng, irange)
-        # self.Wr = numpy.power(self.Wr, 2)
-        # self.Wi = numpy.power(self.Wi, 2)
 
     def fprop(self, inputs):
 
         # input comes from 4D convolutional tensor, reshape to expected shape
-        # a_old = numpy.dot(inputs, self.W)
+
         if inputs.ndim > 2:
             inputs = inputs.reshape(inputs.shape[0], -1)
 
@@ -772,21 +745,17 @@ class ComplexAbs(ComplexLinear):
         return numpy.sqrt(a1 + a2)
 
     def bprop(self, h, igrads):
-        # print igrads.shape
+
         if igrads.ndim >2:
             igrads = igrads.reshape(igrads.shape[0], -1)
-        # print igrads.shape
-        # h[h==0] = 1
-        # import matplotlib.pyplot as plt
-        # plt.imshow(igrads)
+
+        # Derivative of $h(a)= \sqrt{a}$ is $h(a)^{-1}$
         igrads = igrads / h
-        # print igrads
-        # plt.imshow(igrads)
-        # plt.show()
-        # these are irrelevant I think
+
+        # for backpropagating to next layer (ograds)
         ir = numpy.dot(igrads, self.Wr.T)
         ii = numpy.dot(igrads, self.Wi.T)
-        # ograds = numpy.concatenate((ir, ii), axis=1)
+
         return igrads, ir + ii
 
     def bprop_cost(self, h, igrads, cost):

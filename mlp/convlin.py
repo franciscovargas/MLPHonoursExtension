@@ -217,7 +217,10 @@ class ConvLinear_Opt(Layer):
                      self.kernel_shape[0]))
 
     def fprop(self, inputs):
-        # print inputs.shape, "fprop"
+        """
+        Forward propagation as in MLP only that replacing inner products
+        with convolution
+        """
         if inputs.ndim < 3:
             inputs = inputs.reshape(inputs.shape[0],
                                     self.num_inp_feat_maps,
@@ -245,10 +248,10 @@ class ConvLinear_Opt(Layer):
         return out
 
     def bprop(self, h, igrads):
-        # if h is not None:
-        #     print "h", h.shape
-        # if igrads is not None:
-        #     print "i", igrads.shape
+        """
+        Backwards propagation again similar to MLP only that not in the context
+        of inner products but of convolutions
+        """
         image_shape = self.image_shape
         kernel_shape = self.kernel_shape
 
@@ -288,9 +291,9 @@ class ConvLinear_Opt(Layer):
 
         Note: deltas here contain the whole chain rule leading
         from the cost up to the the i-th layer, i.e.
-        dE/dy^L dy^L/da^L da^L/dh^{L-1} dh^{L-1}/da^{L-1} ... dh^{i}/da^{i}
+        $\partial E/\partial y^{L}  \partial y^{L}/ \partial a^{L} \partial a^{L}/ \partial h^{L-1} \partial h^{L-1}/ \partial a^{L-1} ... \partial h^{i}/ \partial a^{i}$
         and here we are just asking about
-          1) da^i/dW^i and 2) da^i/db^i
+          1) $\partial a^{i}/ \partial W^{i}$ and 2) $\partial a^{i}/ \partial b^{i}$
         since W and b are only layer's parameters
         """
 
