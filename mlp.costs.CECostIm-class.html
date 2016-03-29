@@ -6,6 +6,12 @@
   <title>mlp.costs.CECostIm</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,15 +64,15 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class CECostIm</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-object --+    
-         |    
+object --+
+         |
       <a href="mlp.costs.Cost-class.html">Cost</a> --+
              |
             <strong class="uidshort">CECostIm</strong>
 </pre>
 
 <hr />
-<p>Cross Entropy (Negative log-likelihood) cost for multiple classes And 
+<p>Cross Entropy (Negative log-likelihood) cost for multiple classes And
   complex weights</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -96,18 +102,18 @@ object --+
         <span class="summary-sig-arg">y</span>,
         <span class="summary-sig-arg">t</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Implements a cost for monitoring purposes :param y: matrix -- an 
-      output of the model :param t: matrix -- an expected output the model 
+      Implements a cost for monitoring purposes :param y: matrix -- an
+      output of the model :param t: matrix -- an expected output the model
       should produce :param kwargs: -- some optional parameters required by
-      the cost :return: the scalar value representing the cost given y and 
+      the cost :return: the scalar value representing the cost given y and
       t</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm.cost">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -120,17 +126,17 @@ object --+
         <span class="summary-sig-arg">y</span>,
         <span class="summary-sig-arg">t</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Implements a gradient of the cost w.r.t y :param y: matrix -- an 
-      output of the model :param t: matrix -- an expected output the model 
+      Implements a gradient of the cost w.r.t y :param y: matrix -- an
+      output of the model :param t: matrix -- an expected output the model
       should produce :param kwargs: -- some optional parameters required by
       the cost :return: matrix - the gradient of the cost w.r.t y</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm.grad">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -142,11 +148,11 @@ object --+
           <td><span class="summary-sig"><a href="mlp.costs.CECostIm-class.html#get_name" class="summary-sig-name">get_name</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm.get_name">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -228,9 +234,9 @@ object --+
     ><span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm.cost">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Implements a cost for monitoring purposes :param y: matrix -- an 
-  output of the model :param t: matrix -- an expected output the model 
+
+  <p>Implements a cost for monitoring purposes :param y: matrix -- an
+  output of the model :param t: matrix -- an expected output the model
   should produce :param kwargs: -- some optional parameters required by the
   cost :return: the scalar value representing the cost given y and t</p>
   <dl class="fields">
@@ -257,9 +263,9 @@ object --+
     ><span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm.grad">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Implements a gradient of the cost w.r.t y :param y: matrix -- an 
-  output of the model :param t: matrix -- an expected output the model 
+
+  <p>Implements a gradient of the cost w.r.t y :param y: matrix -- an
+  output of the model :param t: matrix -- an expected output the model
   should produce :param kwargs: -- some optional parameters required by the
   cost :return: matrix - the gradient of the cost w.r.t y</p>
   <dl class="fields">
@@ -283,8 +289,8 @@ object --+
     ><span class="codelink"><a href="mlp.costs-pysrc.html#CECostIm.get_name">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.costs.Cost-class.html#get_name">Cost.get_name</a>

@@ -6,6 +6,12 @@
   <title>mlp.layers.Tanh</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,10 +64,10 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class Tanh</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.layers-pysrc.html#Tanh">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-object --+        
-         |        
-     <a href="mlp.layers.Layer-class.html">Layer</a> --+    
-             |    
+object --+
+         |
+     <a href="mlp.layers.Layer-class.html">Layer</a> --+
+             |
         <a href="mlp.layers.Linear-class.html">Linear</a> --+
                  |
                 <strong class="uidshort">Tanh</strong>
@@ -99,11 +105,11 @@ object --+
       x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -122,11 +128,11 @@ with $f^{i}, W^{i}, b^{i}$ denoting a non-linearity, weight matrix and
 biases of this (i-th) layer, respectively and $x$ denoting inputs.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.fprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -141,11 +147,11 @@ biases of this (i-th) layer, respectively and $x$ denoting inputs.</td>
       Implements a backward propagation through the layer, that is, given...</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.bprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -162,11 +168,11 @@ biases of this (i-th) layer, respectively and $x$ denoting inputs.</td>
 deals with the optimised cost (i.e.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.bprop_cost">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -178,11 +184,11 @@ deals with the optimised cost (i.e.</td>
           <td><span class="summary-sig"><a href="mlp.layers.Tanh-class.html#get_name" class="summary-sig-name">get_name</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.get_name">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -270,7 +276,7 @@ deals with the optimised cost (i.e.</td>
     ><span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
   <dl class="fields">
     <dt>Overrides:
@@ -294,7 +300,7 @@ deals with the optimised cost (i.e.</td>
     ><span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.fprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a forward propagation through the i-th layer, that is
@@ -331,7 +337,7 @@ biases of this (i-th) layer, respectively and $x$ denoting inputs.
     ><span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.bprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a backward propagation through the layer, that is, given
@@ -372,7 +378,7 @@ $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
     ><span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.bprop_cost">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a backward propagation in case the layer directly
@@ -411,8 +417,8 @@ linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entrop
     ><span class="codelink"><a href="mlp.layers-pysrc.html#Tanh.get_name">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#get_name">Layer.get_name</a>

@@ -6,6 +6,12 @@
   <title>mlp.conv.ConvSigmoid_Opt</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,10 +64,10 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class ConvSigmoid_Opt</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+        
-           |        
-<a href="mlp.layers.Layer-class.html">layers.Layer</a> --+    
-               |    
+  object --+
+           |
+<a href="mlp.layers.Layer-class.html">layers.Layer</a> --+
+               |
   <a href="mlp.conv.ConvLinear_Opt-class.html">ConvLinear_Opt</a> --+
                    |
                   <strong class="uidshort">ConvSigmoid_Opt</strong>
@@ -104,12 +110,12 @@
         <span class="summary-sig-arg">conv_grad</span>=<span class="summary-sig-default">&lt;function my1_conv2d_tense at 0x3e5b848&gt;</span>)</span><br />
       Almost fully vectorized linear convolution:</td>
           <td align="right" valign="top">
-            
-            
+
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -123,12 +129,12 @@
         <span class="summary-sig-arg">igrads</span>)</span><br />
       Implements a backward propagation through the layer, that is, given...</td>
           <td align="right" valign="top">
-            
-            
+
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -144,12 +150,12 @@
       Implements a backward propagation in case the layer directly
 deals with the optimised cost (i.e.</td>
           <td align="right" valign="top">
-            
-            
+
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -167,12 +173,12 @@ some form of:
 with f^i, W^i, b^i denoting a non-linearity, weight matrix and
 biases at the i-th layer, respectively and x denoting inputs.</td>
           <td align="right" valign="top">
-            
-            
+
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -183,12 +189,12 @@ biases at the i-th layer, respectively and x denoting inputs.</td>
         <tr>
           <td><span class="summary-sig"><a href="mlp.conv.ConvSigmoid_Opt-class.html#get_name" class="summary-sig-name">get_name</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            
-            
+
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -283,18 +289,18 @@ biases at the i-th layer, respectively and x denoting inputs.</td>
     >&nbsp;
     </td>
   </tr></table>
-  
+
   <p>Almost fully vectorized linear convolution:</p>
   <p>--- fprop + fprop_convolution: 1 loop --- bprop + bprop_convolution: 1
   loops --- pgrads + pgrads_convolution: 2 loops</p>
-  <p>:param num_inp_feat_maps: int, a number of input feature maps 
+  <p>:param num_inp_feat_maps: int, a number of input feature maps
   (channels) :param num_out_feat_maps: int, a number of output feature maps
-  (channels) :param image_shape: tuple, a shape of the image :param 
+  (channels) :param image_shape: tuple, a shape of the image :param
   kernel_shape: tuple, a shape of the kernel :param stride: tuple, shift of
-  kernels in both dimensions :param irange: float, initial range of the 
+  kernels in both dimensions :param irange: float, initial range of the
   parameters :param rng: RandomState object, random number generator :param
-  conv_fwd: handle to a convolution function used in fwd-prop :param 
-  conv_bck: handle to a convolution function used in backward-prop :param 
+  conv_fwd: handle to a convolution function used in fwd-prop :param
+  conv_bck: handle to a convolution function used in backward-prop :param
   conv_grad: handle to a convolution function used in pgrads :return:</p>
   <dl class="fields">
     <dt>Overrides:
@@ -319,7 +325,7 @@ biases at the i-th layer, respectively and x denoting inputs.</td>
     >&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a backward propagation through the layer, that is, given
@@ -360,7 +366,7 @@ x^i could be either features (x) or the output of the lower layer h^{i-1}
     >&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a backward propagation in case the layer directly
@@ -400,7 +406,7 @@ linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entrop
     >&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a forward propagation through the i-th layer, that is
@@ -435,8 +441,8 @@ biases at the i-th layer, respectively and x denoting inputs.
     >&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#get_name">layers.Layer.get_name</a>

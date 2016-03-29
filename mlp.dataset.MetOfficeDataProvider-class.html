@@ -6,6 +6,12 @@
   <title>mlp.dataset.MetOfficeDataProvider</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,15 +64,15 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class MetOfficeDataProvider</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-  object --+    
-           |    
+  object --+
+           |
 <a href="mlp.dataset.DataProvider-class.html">DataProvider</a> --+
                |
               <strong class="uidshort">MetOfficeDataProvider</strong>
 </pre>
 
 <hr />
-<p>The class iterates over South Scotland Weather, in possibly random 
+<p>The class iterates over South Scotland Weather, in possibly random
   order.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -101,11 +107,11 @@
       :param batch_size: int, specifies the number...</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -115,15 +121,15 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="mlp.dataset.MetOfficeDataProvider-class.html#reset" class="summary-sig-name">reset</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Resets the provider to the initial state to use in another epoch 
+      Resets the provider to the initial state to use in another epoch
       :return: None</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.reset">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr class="private">
@@ -135,11 +141,11 @@
           <td><span class="summary-sig"><a name="__randomize"></a><span class="summary-sig-name">__randomize</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.__randomize">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -152,11 +158,11 @@
       Data-specific iteration mechanism.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.next">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -244,7 +250,7 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 :param batch_size: int, specifies the number
@@ -276,8 +282,8 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.reset">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Resets the provider to the initial state to use in another epoch 
+
+  <p>Resets the provider to the initial state to use in another epoch
   :return: None</p>
   <dl class="fields">
     <dt>Overrides:
@@ -300,9 +306,9 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MetOfficeDataProvider.next">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Data-specific iteration mechanism. Called each step (i.e. each 
-  iteration in a loop) unitl StopIteration() exception is raised. 
+
+  <p>Data-specific iteration mechanism. Called each step (i.e. each
+  iteration in a loop) unitl StopIteration() exception is raised.
   :return:</p>
   <dl class="fields">
     <dt>Overrides:

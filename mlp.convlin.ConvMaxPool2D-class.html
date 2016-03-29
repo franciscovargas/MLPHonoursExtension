@@ -6,6 +6,12 @@
   <title>mlp.convlin.ConvMaxPool2D</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,8 +64,8 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class ConvMaxPool2D</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-  object --+    
-           |    
+  object --+
+           |
 <a href="mlp.layers.Layer-class.html">layers.Layer</a> --+
                |
               <strong class="uidshort">ConvMaxPool2D</strong>
@@ -94,16 +100,16 @@
         <span class="summary-sig-arg">conv_shape</span>,
         <span class="summary-sig-arg">pool_shape</span>=<span class="summary-sig-default">2</span>,
         <span class="summary-sig-arg">pool_stride</span>=<span class="summary-sig-default"><code class="variable-group">(</code>2<code class="variable-op">, </code>2<code class="variable-group">)</code></span>)</span><br />
-      :param conv_shape: tuple, a shape of the lower convolutional feature 
-      maps output :param pool_shape: tuple, a shape of pooling operator 
+      :param conv_shape: tuple, a shape of the lower convolutional feature
+      maps output :param pool_shape: tuple, a shape of pooling operator
       :param pool_stride: tuple, a strides for pooling operator :return:</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -118,11 +124,11 @@
 shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.fprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -137,11 +143,11 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
       Implements a backward propagation through the layer, that is, given...</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.bprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -153,11 +159,11 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
           <td><span class="summary-sig"><a href="mlp.convlin.ConvMaxPool2D-class.html#get_params" class="summary-sig-name">get_params</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.get_params">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -173,11 +179,11 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
       Return gradients w.r.t parameters</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.pgrads">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -190,11 +196,11 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
         <span class="summary-sig-arg">params</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.set_params">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -206,11 +212,11 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
           <td><span class="summary-sig"><a href="mlp.convlin.ConvMaxPool2D-class.html#get_name" class="summary-sig-name">get_name</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.get_name">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -260,15 +266,15 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
         <tr>
           <td><span class="summary-sig"><a name="vectorized_Gneration"></a><span class="summary-sig-name">vectorized_Gneration</span>(<span class="summary-sig-arg">a</span>,
         <span class="summary-sig-arg">indices</span>)</span><br />
-      Vectorized index bijection for 4D tensor must work on 5D 5D it is 
+      Vectorized index bijection for 4D tensor must work on 5D 5D it is
       must test.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.vectorized_Gneration">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 </table>
@@ -358,9 +364,9 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>:param conv_shape: tuple, a shape of the lower convolutional feature 
-  maps output :param pool_shape: tuple, a shape of pooling operator :param 
+
+  <p>:param conv_shape: tuple, a shape of the lower convolutional feature
+  maps output :param pool_shape: tuple, a shape of pooling operator :param
   pool_stride: tuple, a strides for pooling operator :return:</p>
   <dl class="fields">
     <dt>Overrides:
@@ -383,7 +389,7 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;</td>
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.fprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 &quot;In that blessed region of Four Dimensions,
@@ -414,7 +420,7 @@ shall we linger on the threshold of the Fifth, and not enter therein?&quot;
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.bprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a backward propagation through the layer, that is, given
@@ -452,8 +458,8 @@ $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.get_params">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#get_params">layers.Layer.get_params</a>
@@ -477,7 +483,7 @@ $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.pgrads">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <p>Return gradients w.r.t parameters</p>
   <dl class="fields">
     <dt>Overrides:
@@ -501,8 +507,8 @@ $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.set_params">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#set_params">layers.Layer.set_params</a>
@@ -523,8 +529,8 @@ $x^i$ could be either features $(x)$ or the output of the lower layer $h^{i-1}$
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvMaxPool2D.get_name">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#get_name">layers.Layer.get_name</a>

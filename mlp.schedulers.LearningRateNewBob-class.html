@@ -6,6 +6,12 @@
   <title>mlp.schedulers.LearningRateNewBob</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,8 +64,8 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class LearningRateNewBob</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-           object --+    
-                    |    
+           object --+
+                    |
 <a href="mlp.schedulers.LearningRateScheduler-class.html">LearningRateScheduler</a> --+
                         |
                        <strong class="uidshort">LearningRateNewBob</strong>
@@ -67,7 +73,7 @@
 
 <hr />
 <p>newbob learning rate schedule.</p>
-  <p>Fixed learning rate until validation set stops improving then 
+  <p>Fixed learning rate until validation set stops improving then
   exponential decay.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -106,11 +112,11 @@
       :type start_rate: float :param start_rate:</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -122,11 +128,11 @@
           <td><span class="summary-sig"><a name="reset"></a><span class="summary-sig-name">reset</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.reset">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -138,11 +144,11 @@
           <td><span class="summary-sig"><a href="mlp.schedulers.LearningRateNewBob-class.html#get_rate" class="summary-sig-name">get_rate</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.get_rate">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -153,15 +159,15 @@
         <tr>
           <td><span class="summary-sig"><a href="mlp.schedulers.LearningRateNewBob-class.html#get_next_rate" class="summary-sig-name">get_next_rate</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">current_accuracy</span>)</span><br />
-      :type current_accuracy: float :param current_accuracy: current 
+      :type current_accuracy: float :param current_accuracy: current
       proportion correctly classified</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.get_next_rate">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -249,7 +255,7 @@
     ><span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <p>:type start_rate: float :param start_rate:</p>
   <p>:type scale_by: float :param scale_by:</p>
   <p>:type max_epochs: int :param max_epochs:</p>
@@ -276,8 +282,8 @@
     ><span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.get_rate">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.schedulers.LearningRateScheduler-class.html#get_rate">LearningRateScheduler.get_rate</a>
@@ -299,8 +305,8 @@
     ><span class="codelink"><a href="mlp.schedulers-pysrc.html#LearningRateNewBob.get_next_rate">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>:type current_accuracy: float :param current_accuracy: current 
+
+  <p>:type current_accuracy: float :param current_accuracy: current
   proportion correctly classified</p>
   <dl class="fields">
     <dt>Overrides:

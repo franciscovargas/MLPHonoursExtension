@@ -6,6 +6,12 @@
   <title>mlp.costs.Cost</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -99,18 +105,18 @@ object --+
         <span class="summary-sig-arg">y</span>,
         <span class="summary-sig-arg">t</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Implements a cost for monitoring purposes :param y: matrix -- an 
-      output of the model :param t: matrix -- an expected output the model 
+      Implements a cost for monitoring purposes :param y: matrix -- an
+      output of the model :param t: matrix -- an expected output the model
       should produce :param kwargs: -- some optional parameters required by
-      the cost :return: the scalar value representing the cost given y and 
+      the cost :return: the scalar value representing the cost given y and
       t</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.costs-pysrc.html#Cost.cost">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -123,17 +129,17 @@ object --+
         <span class="summary-sig-arg">y</span>,
         <span class="summary-sig-arg">t</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Implements a gradient of the cost w.r.t y :param y: matrix -- an 
-      output of the model :param t: matrix -- an expected output the model 
+      Implements a gradient of the cost w.r.t y :param y: matrix -- an
+      output of the model :param t: matrix -- an expected output the model
       should produce :param kwargs: -- some optional parameters required by
       the cost :return: matrix - the gradient of the cost w.r.t y</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.costs-pysrc.html#Cost.grad">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -145,11 +151,11 @@ object --+
           <td><span class="summary-sig"><a name="get_name"></a><span class="summary-sig-name">get_name</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.costs-pysrc.html#Cost.get_name">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>

@@ -6,6 +6,12 @@
   <title>mlp.dataset.DataProvider</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -70,7 +76,7 @@ object --+
 </dd></dl>
 
 <hr />
-<p>Data provider defines an interface for our generic data-independent 
+<p>Data provider defines an interface for our generic data-independent
   readers.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -103,11 +109,11 @@ object --+
       :param batch_size: int, specifies the number...</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -117,15 +123,15 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="reset"></a><span class="summary-sig-name">reset</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Resets the provider to the initial state to use in another epoch 
+      Resets the provider to the initial state to use in another epoch
       :return: None</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.reset">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr class="private">
@@ -138,11 +144,11 @@ object --+
       Data-specific implementation of shuffling mechanism :return:</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.__randomize">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -155,11 +161,11 @@ object --+
       This method says an object is iterable.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.__iter__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -172,11 +178,11 @@ object --+
       Data-specific iteration mechanism.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.next">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -189,11 +195,11 @@ object --+
       Returns a number of data-points in dataset</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.num_examples">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -275,7 +281,7 @@ object --+
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 :param batch_size: int, specifies the number
@@ -306,9 +312,9 @@ object --+
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#DataProvider.next">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Data-specific iteration mechanism. Called each step (i.e. each 
-  iteration in a loop) unitl StopIteration() exception is raised. 
+
+  <p>Data-specific iteration mechanism. Called each step (i.e. each
+  iteration in a loop) unitl StopIteration() exception is raised.
   :return:</p>
   <dl class="fields">
   </dl>

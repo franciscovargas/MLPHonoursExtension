@@ -6,6 +6,12 @@
   <title>mlp.dataset.MACLDataProvider</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,15 +64,15 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class MACLDataProvider</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-  object --+    
-           |    
+  object --+
+           |
 <a href="mlp.dataset.DataProvider-class.html">DataProvider</a> --+
                |
               <strong class="uidshort">MACLDataProvider</strong>
 </pre>
 
 <hr />
-<p>The class iterates over thingy action timeseries accelerometer based 
+<p>The class iterates over thingy action timeseries accelerometer based
   dataset</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -106,11 +112,11 @@
       :param batch_size: int, specifies the number...</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -120,15 +126,15 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="mlp.dataset.MACLDataProvider-class.html#reset" class="summary-sig-name">reset</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Resets the provider to the initial state to use in another epoch 
+      Resets the provider to the initial state to use in another epoch
       :return: None</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.reset">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr class="private">
@@ -140,11 +146,11 @@
           <td><span class="summary-sig"><a name="__randomize"></a><span class="summary-sig-name">__randomize</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.__randomize">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -157,11 +163,11 @@
       Data-specific iteration mechanism.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.next">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -174,11 +180,11 @@
       Returns a number of data-points in dataset</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.num_examples">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -190,11 +196,11 @@
           <td><span class="summary-sig"><a name="num_examples_presented"></a><span class="summary-sig-name">num_examples_presented</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.num_examples_presented">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr class="private">
@@ -207,11 +213,11 @@
         <span class="summary-sig-arg">y</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.__to_one_of_k">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -303,7 +309,7 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 :param batch_size: int, specifies the number
@@ -335,8 +341,8 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.reset">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Resets the provider to the initial state to use in another epoch 
+
+  <p>Resets the provider to the initial state to use in another epoch
   :return: None</p>
   <dl class="fields">
     <dt>Overrides:
@@ -359,9 +365,9 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.next">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Data-specific iteration mechanism. Called each step (i.e. each 
-  iteration in a loop) unitl StopIteration() exception is raised. 
+
+  <p>Data-specific iteration mechanism. Called each step (i.e. each
+  iteration in a loop) unitl StopIteration() exception is raised.
   :return:</p>
   <dl class="fields">
     <dt>Overrides:
@@ -384,7 +390,7 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#MACLDataProvider.num_examples">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <p>Returns a number of data-points in dataset</p>
   <dl class="fields">
     <dt>Overrides:

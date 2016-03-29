@@ -6,6 +6,12 @@
   <title>mlp.utils</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -83,15 +89,15 @@
         <span class="summary-sig-arg">x</span>,
         <span class="summary-sig-arg">eps</span>=<span class="summary-sig-default">0.0001</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Implements the following numerical gradient rule df(x)/dx = 
+      Implements the following numerical gradient rule df(x)/dx =
       (f(x+eps)-f(x-eps))/(2eps)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.utils-pysrc.html#numerical_gradient">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -108,11 +114,11 @@
       Compares the numerical and analytical gradients.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.utils-pysrc.html#verify_gradient">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -127,11 +133,11 @@
         <span class="summary-sig-arg">tol</span>=<span class="summary-sig-default">1e-06</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.utils-pysrc.html#verify_layer_gradient">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -147,11 +153,11 @@
       Tests forward propagation method of a convolutional layer.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.utils-pysrc.html#test_conv_linear_fprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -167,11 +173,11 @@
       Tests input gradients backpropagation method of a convolutional layer.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.utils-pysrc.html#test_conv_linear_bprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -187,11 +193,11 @@
       Tests parameter gradients backpropagation method of a convolutional layer.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.utils-pysrc.html#test_conv_linear_pgrads">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 </table>
@@ -254,7 +260,7 @@
     ><span class="codelink"><a href="mlp.utils-pysrc.html#test_conv_linear_fprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Tests forward propagation method of a convolutional layer.
@@ -319,7 +325,7 @@ ValueError
     ><span class="codelink"><a href="mlp.utils-pysrc.html#test_conv_linear_bprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Tests input gradients backpropagation method of a convolutional layer.
@@ -384,7 +390,7 @@ ValueError
     ><span class="codelink"><a href="mlp.utils-pysrc.html#test_conv_linear_pgrads">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Tests parameter gradients backpropagation method of a convolutional layer.

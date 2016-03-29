@@ -6,6 +6,12 @@
   <title>mlp.layers.MLP</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -64,10 +70,10 @@ object --+
 </pre>
 
 <hr />
-<p>This is a container for an arbitrary sequence of other transforms On 
+<p>This is a container for an arbitrary sequence of other transforms On
   top of this, the class also keeps the state of the model, i.e. the result
-  of forward (activations) and backward (deltas) passes through the model 
-  (for a mini-batch), which is required to compute the gradients for the 
+  of forward (activations) and backward (deltas) passes through the model
+  (for a mini-batch), which is required to compute the gradients for the
   parameters</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -99,11 +105,11 @@ object --+
       x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -117,15 +123,15 @@ object --+
         <span class="summary-sig-arg">noise_up_layer</span>=<span class="summary-sig-default">-1</span>,
         <span class="summary-sig-arg">noise_list</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">wrong</span>=<span class="summary-sig-default">False</span>)</span><br />
-      :param inputs: mini-batch of data-points x :return: y (top layer 
+      :param inputs: mini-batch of data-points x :return: y (top layer
       activation) which is an estimate of y given x</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.fprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -137,16 +143,16 @@ object --+
           <td><span class="summary-sig"><a name="fprop_dropout"></a><span class="summary-sig-name">fprop_dropout</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">x</span>,
         <span class="summary-sig-arg">dp_scheduler</span>)</span><br />
-      :param inputs: mini-batch of data-points x :param dp_scheduler: 
-      dropout scheduler :return: y (top layer activation) which is an 
+      :param inputs: mini-batch of data-points x :param dp_scheduler:
+      dropout scheduler :return: y (top layer activation) which is an
       estimate of y given x</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.fprop_dropout">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -158,15 +164,15 @@ object --+
           <td><span class="summary-sig"><a name="bprop"></a><span class="summary-sig-name">bprop</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">cost_grad</span>,
         <span class="summary-sig-arg">dp_scheduler</span>=<span class="summary-sig-default">None</span>)</span><br />
-      :param cost_grad: matrix -- grad of the cost w.r.t y :return: None, 
+      :param cost_grad: matrix -- grad of the cost w.r.t y :return: None,
       the deltas are kept in the model</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.bprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -179,11 +185,11 @@ object --+
         <span class="summary-sig-arg">layer</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.add_layer">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -196,11 +202,11 @@ object --+
         <span class="summary-sig-arg">layers</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.set_layers">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -212,11 +218,11 @@ object --+
           <td><span class="summary-sig"><a name="get_name"></a><span class="summary-sig-name">get_name</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.get_name">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -228,11 +234,11 @@ object --+
           <td><span class="summary-sig"><a name="remove_top_layer"></a><span class="summary-sig-name">remove_top_layer</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.layers-pysrc.html#MLP.remove_top_layer">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -313,7 +319,7 @@ object --+
     ><span class="codelink"><a href="mlp.layers-pysrc.html#MLP.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
   <dl class="fields">
     <dt>Overrides:

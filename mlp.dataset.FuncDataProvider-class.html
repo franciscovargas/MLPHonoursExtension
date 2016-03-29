@@ -6,6 +6,12 @@
   <title>mlp.dataset.FuncDataProvider</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,8 +64,8 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class FuncDataProvider</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-  object --+    
-           |    
+  object --+
+           |
 <a href="mlp.dataset.DataProvider-class.html">DataProvider</a> --+
                |
               <strong class="uidshort">FuncDataProvider</strong>
@@ -103,11 +109,11 @@
       :param batch_size: int, specifies the number...</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr class="private">
@@ -119,11 +125,11 @@
           <td><span class="summary-sig"><a name="__randomize"></a><span class="summary-sig-name">__randomize</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.__randomize">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -136,11 +142,11 @@
       This method says an object is iterable.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.__iter__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -153,11 +159,11 @@
       Data-specific iteration mechanism.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.next">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -247,7 +253,7 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 :param batch_size: int, specifies the number
@@ -278,7 +284,7 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.__iter__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <p>This method says an object is iterable.</p>
   <dl class="fields">
     <dt>Overrides:
@@ -301,9 +307,9 @@
     ><span class="codelink"><a href="mlp.dataset-pysrc.html#FuncDataProvider.next">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Data-specific iteration mechanism. Called each step (i.e. each 
-  iteration in a loop) unitl StopIteration() exception is raised. 
+
+  <p>Data-specific iteration mechanism. Called each step (i.e. each
+  iteration in a loop) unitl StopIteration() exception is raised.
   :return:</p>
   <dl class="fields">
     <dt>Overrides:

@@ -6,6 +6,12 @@
   <title>mlp.convlin.ConvLinear_Opt</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="#204080"
@@ -58,8 +64,8 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class ConvLinear_Opt</h1><p class="nomargin-top"><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-  object --+    
-           |    
+  object --+
+           |
 <a href="mlp.layers.Layer-class.html">layers.Layer</a> --+
                |
               <strong class="uidshort">ConvLinear_Opt</strong>
@@ -106,23 +112,23 @@
         <span class="summary-sig-arg">conv_fwd</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>,
         <span class="summary-sig-arg">conv_bck</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>,
         <span class="summary-sig-arg">conv_grad</span>=<span class="summary-sig-default">&lt;function my1_conv2d at 0x39a0c80&gt;</span>)</span><br />
-      :param num_inp_feat_maps: int, a number of input feature maps 
-      (channels) :param num_out_feat_maps: int, a number of output feature 
-      maps (channels) :param image_shape: tuple, a shape of the image 
-      :param kernel_shape: tuple, a shape of the kernel :param stride: 
-      tuple, shift of kernels in both dimensions :param irange: float, 
-      initial range of the parameters :param rng: RandomState object, 
-      random number generator :param conv_fwd: handle to a convolution 
-      function used in fwd-prop :param conv_bck: handle to a convolution 
-      function used in backward-prop :param conv_grad: handle to a 
+      :param num_inp_feat_maps: int, a number of input feature maps
+      (channels) :param num_out_feat_maps: int, a number of output feature
+      maps (channels) :param image_shape: tuple, a shape of the image
+      :param kernel_shape: tuple, a shape of the kernel :param stride:
+      tuple, shift of kernels in both dimensions :param irange: float,
+      initial range of the parameters :param rng: RandomState object,
+      random number generator :param conv_fwd: handle to a convolution
+      function used in fwd-prop :param conv_bck: handle to a convolution
+      function used in backward-prop :param conv_grad: handle to a
       convolution function used in pgrads :return:</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.__init__">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -134,11 +140,11 @@
           <td><span class="summary-sig"><a name="weight2"></a><span class="summary-sig-name">weight2</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.weight2">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -150,11 +156,11 @@
           <td><span class="summary-sig"><a name="weight"></a><span class="summary-sig-name">weight</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.weight">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -169,11 +175,11 @@
       convolution</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.fprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -185,15 +191,15 @@
           <td><span class="summary-sig"><a href="mlp.convlin.ConvLinear_Opt-class.html#bprop" class="summary-sig-name">bprop</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">h</span>,
         <span class="summary-sig-arg">igrads</span>)</span><br />
-      Backwards propagation again similar to MLP only that not in the 
+      Backwards propagation again similar to MLP only that not in the
       context of inner products but of convolutions</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.bprop">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -210,11 +216,11 @@
 deals with the optimised cost (i.e.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.bprop_cost">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -231,11 +237,11 @@ deals with the optimised cost (i.e.</td>
       Return gradients w.r.t parameters</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.pgrads">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -247,11 +253,11 @@ deals with the optimised cost (i.e.</td>
           <td><span class="summary-sig"><a href="mlp.convlin.ConvLinear_Opt-class.html#get_params" class="summary-sig-name">get_params</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.get_params">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -264,11 +270,11 @@ deals with the optimised cost (i.e.</td>
         <span class="summary-sig-arg">params</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.set_params">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
 <tr>
@@ -280,11 +286,11 @@ deals with the optimised cost (i.e.</td>
           <td><span class="summary-sig"><a href="mlp.convlin.ConvLinear_Opt-class.html#get_name" class="summary-sig-name">get_name</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.get_name">source&nbsp;code</a></span>
-            
+
           </td>
         </tr>
       </table>
-      
+
     </td>
   </tr>
   <tr>
@@ -373,15 +379,15 @@ deals with the optimised cost (i.e.</td>
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>:param num_inp_feat_maps: int, a number of input feature maps 
+
+  <p>:param num_inp_feat_maps: int, a number of input feature maps
   (channels) :param num_out_feat_maps: int, a number of output feature maps
-  (channels) :param image_shape: tuple, a shape of the image :param 
+  (channels) :param image_shape: tuple, a shape of the image :param
   kernel_shape: tuple, a shape of the kernel :param stride: tuple, shift of
-  kernels in both dimensions :param irange: float, initial range of the 
+  kernels in both dimensions :param irange: float, initial range of the
   parameters :param rng: RandomState object, random number generator :param
-  conv_fwd: handle to a convolution function used in fwd-prop :param 
-  conv_bck: handle to a convolution function used in backward-prop :param 
+  conv_fwd: handle to a convolution function used in fwd-prop :param
+  conv_bck: handle to a convolution function used in backward-prop :param
   conv_grad: handle to a convolution function used in pgrads :return:</p>
   <dl class="fields">
     <dt>Overrides:
@@ -404,8 +410,8 @@ deals with the optimised cost (i.e.</td>
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.fprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Forward propagation as in MLP only that replacing inner products with 
+
+  <p>Forward propagation as in MLP only that replacing inner products with
   convolution</p>
   <dl class="fields">
     <dt>Overrides:
@@ -429,8 +435,8 @@ deals with the optimised cost (i.e.</td>
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.bprop">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  <p>Backwards propagation again similar to MLP only that not in the 
+
+  <p>Backwards propagation again similar to MLP only that not in the
   context of inner products but of convolutions</p>
   <dl class="fields">
     <dt>Overrides:
@@ -455,7 +461,7 @@ deals with the optimised cost (i.e.</td>
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.bprop_cost">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Implements a backward propagation in case the layer directly
@@ -498,7 +504,7 @@ linear -&gt; mse, softmax -&gt; cross-entropy, sigmoid -&gt; binary cross-entrop
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.pgrads">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
+
   <pre class="literalblock">
 
 Return gradients w.r.t parameters
@@ -537,8 +543,8 @@ since W and b are only layer's parameters
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.get_params">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#get_params">layers.Layer.get_params</a>
@@ -560,8 +566,8 @@ since W and b are only layer's parameters
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.set_params">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#set_params">layers.Layer.set_params</a>
@@ -582,8 +588,8 @@ since W and b are only layer's parameters
     ><span class="codelink"><a href="mlp.convlin-pysrc.html#ConvLinear_Opt.get_name">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
-  
-  
+
+
   <dl class="fields">
     <dt>Overrides:
         <a href="mlp.layers.Layer-class.html#get_name">layers.Layer.get_name</a>
