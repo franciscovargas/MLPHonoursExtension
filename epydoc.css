@@ -1,4 +1,4 @@
-
+/*
 
 /* Epydoc CSS Stylesheet
  *
@@ -319,7 +319,7 @@ h2.log-hdr                  { background: #70b0ff; color: #000000;
 p.log                       { font-weight: bold; margin: .5em 0 .5em 0; }
 tr.opt-changed              { color: #000000; font-weight: bold; }
 tr.opt-default              { color: #606060; }
-pre.log                     { margin: 0; padding: 0; padding-left: 1em; }
+pre.log                     { margin: 0; padding: 0; padding-left: 1em; }*/
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
