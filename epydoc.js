@@ -114,7 +114,7 @@ function collapse(id) {
   var elt = document.getElementById(id+"-collapsed");
   if (elt) {
     elt.style.display = "block";
-    
+
     var indent = elt.getAttribute("indent");
     var pad = elt.getAttribute("pad");
     var s = "<tt class='py-lineno'>";
@@ -131,7 +131,7 @@ function collapse(id) {
 function toggle(id) {
   elt = document.getElementById(id+"-toggle");
   if (elt.innerHTML == "-")
-      collapse(id); 
+      collapse(id);
   else
       expand(id);
   return false;
@@ -214,14 +214,14 @@ function doclink(id, name, targets_id) {
     box1.style.display = "inline";
     box1.style.top = 0;
     box1.style.left = 0;
-  
+
     // A shadow for fun
     var shadow = document.createElement("div");
     shadow.style.position = "absolute";
     shadow.style.left = "-1.3em";
     shadow.style.top = "-1.3em";
     shadow.style.background = "#404040";
-    
+
     // The inner box: absolute positioning.
     var box2 = document.createElement("div");
     box2.style.position = "relative";
@@ -241,11 +241,11 @@ function doclink(id, name, targets_id) {
     target_list = targets.split(",");
     for (var i=0; i<target_list.length; i++) {
         var target = target_list[i].split("=");
-        links += "<li><a href='" + target[1] + 
+        links += "<li><a href='" + target[1] +
                "' style='text-decoration:none'>" +
                target[0] + "</a></li>";
     }
-  
+
     // Put it all together.
     elt.insertBefore(box1, elt.childNodes.item(0));
     //box1.appendChild(box2);
@@ -254,7 +254,7 @@ function doclink(id, name, targets_id) {
     box2.innerHTML =
         "Which <b>"+name+"</b> do you want to see documentation for?" +
         "<ul style='margin-bottom: 0;'>" +
-        links + 
+        links +
         "<li><a href='#' style='text-decoration:none' " +
         "onclick='kill_doclink(\""+id+"\");return false;'>"+
         "<i>None of the above</i></a></li></ul>";
