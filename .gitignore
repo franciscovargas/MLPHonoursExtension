@@ -1,2 +1,4 @@
 shapley.pkl
 shapley2.pkl
+.ipynb_checkpoints/
+*.pyc
