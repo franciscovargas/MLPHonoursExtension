@@ -162,16 +162,8 @@ class SGDOptimiser(Optimiser):
                                                deltas=model.deltas[i + 1],
                                                l1_weight=self.l1_weight,
                                                l2_weight=self.l2_weight)
-                # print "88888888888888"
-                # print model.layers[i].get_name()
-                # print grads[0].shape
-                # print grads[1].shape
-                # print params[0].shape
-                # print "999999999999999999"
                 uparams = []
                 for param, grad in zip(params, grads):
-                    # print grad.shape
-                    # print param.shape
                     param = param - effective_learning_rate * grad
                     uparams.append(param)
                 model.layers[i].set_params(uparams)
@@ -180,23 +172,6 @@ class SGDOptimiser(Optimiser):
             acc_list.append(numpy.mean(self.classification_accuracy(y, t)))
 
         # compute the prior penalties contribution (parameter dependent only)
-
-        for i in xrange(0, len(model.layers)):
-            if (model.layers[i].get_name() != 'clinear'
-                    and model.layers[i].get_name() != 'dftlinear'):
-                if i == 1:
-                    # plt.matshow(model.layers[i].W)
-                    # plt.draw()
-                    # plt.pause(0.0001)
-                    pass
-                pass
-            else:
-                # # fig = plt.figure()
-                # plt.matshow(model.layers[i].Wr)
-                # plt.pause(0.0001)
-                # plt.savefig("fig%s.png"%self.f)
-                # plt.close(fig)
-                pass
 
         prior_costs = Optimiser.compute_prior_costs(
             model, self.l1_weight, self.l2_weight)
