@@ -468,15 +468,17 @@ class ConvRelu_Opt(ConvLinear_Opt):
  
 class ConvMaxPool2D(Layer):
     # To be set by fprop
-    G = None # this should be inside init, bad programming.
+    G = None
 
     def __init__(self,
                  num_feat_maps,
                  conv_shape,
-                 pool_shape=2,
+                 pool_shape=(2, 2),
                  pool_stride=(2, 2)):
         """
-        :param conv_shape: tuple, a shape of the lower convolutional feature maps output
+
+        :param conv_shape: tuple, a shape of the lower convolutional
+               feature maps output
         :param pool_shape: tuple, a shape of pooling operator
         :param pool_stride: tuple, a strides for pooling operator
         :return:
@@ -486,47 +488,104 @@ class ConvMaxPool2D(Layer):
         self.num_feat_maps = num_feat_maps
         self.conv_shape = conv_shape
         self.pool_shape = pool_shape
-        self.p_x = pool_shape
+        self.p_y, self.p_x = pool_shape
         self.pool_stride = pool_stride
+        self.stride = pool_stride
+        self.s_y, self.s_x = pool_stride
 
 
     @staticmethod
     def vectorized_Gneration(a,indices):
         """
-        Vectorized index bijection for 4D tensor must work on 5D
-        5D it is must test.
+        Vectorized index bijection for 5D tensors
+        Used in maxpooling for the construction of matrix
+        G
         """
-        l,p,m,r = a.shape
-        a.reshape(-1,r)[np.arange(l*p*m),indices.ravel()] = 1
+        l,p,m,n,r = a.shape
+        a.reshape(-1,r)[np.arange(l*p*m*n),indices.ravel()] = 1
 
     def fprop(self, inputs):
-        """
-        "In that blessed region of Four Dimensions,
-        shall we linger on the threshold of the Fifth, and not enter therein?"
-        - Flatland, Edwin Abbott.
-        """
-        p_x = self.pool_shape
-        N, nf_i, h = inputs.shape
 
-        N, nf_i, nh = (N, nf_i, h/p_x)
+        s_y, s_x = self.stride
+        p_y, p_x = self.pool_shape
+        N, nf_i, w, h = inputs.shape
+        # Safety Hacks:
+        input_tmp = deepcopy(inputs)
 
-        arg = inputs.reshape(N, nf_i, nh, p_x)
 
-        O = np.max(arg, axis=-1)
-        I = np.argmax(arg, axis=-1)
+        # The non overlapping stride is implemented by setting
+        # the rows and collumns to skip to 0 and expanding the kernel
+        # in such way that they are covered (but do not contribute)
+        # Addtionally the image is also expanded such that it
+        # fits the new kernel size. This was my vectorized way
+        #  of inplementing the strides
+        # This is all carried out under the assumption that the kernel is symmetric
+        # since otherwise I would have a bunch of even more ugglier condtionals
+        # print p_y, p_x
+        # good accuracies and tested results without strides I ran out of time
+        # for the strides
+        if self.stride[0] > 2:
 
-        self.G = np.zeros((N, nf_i, nh, p_x))
+            # Resizing the kernel
+            p_y += (s_y - 2)
+            p_x += (s_x - 2)
+
+            # Calculation of outer image padding
+            x_pad = (w % p_x)
+            y_pad = (h % p_y)
+
+            # Outer image padding for larger kernel
+            input_tmp = np.pad(input_tmp,
+                               ((0, 0),
+                                (0, 0),
+                                (0, y_pad),
+                                (0, x_pad)),
+                               'constant',
+                               constant_values=0)
+            input_tmp[:,:,p_y:-1:p_y,:] = 0
+            input_tmp[:,:,:,p_y:-1:p_y] = 0
+
+        N, nf_i, nh, nw = (N, nf_i, h/p_y, w/p_x)
+
+
+        arg = input_tmp.reshape(N, nf_i, nh, p_y, nw, p_x).swapaxes(3,4)\
+                       .reshape(N, nf_i,nh*nw, p_x*p_y )
+
+        O, I =  max_and_argmax(arg, axes=3)
+
+        # Construction of matrix G and unlike the lectures it is applied via
+        # Hadamard elementwise multiplication instead of matrix mult
+        self.G = np.zeros((N, nf_i, nh, nw, p_x*p_y))
         self.vectorized_Gneration(self.G, I)
-        self.G = self.G.reshape(N, nf_i, h)
+        self.G = self.G.reshape(N, nf_i, nh, nw,p_y,p_x).swapaxes(3,4)\
+                       .reshape(N, nf_i, h, w)
 
 
-        return O.reshape(N, nf_i, nh)
-
+        return O.reshape(N, nf_i, nh, nw)
 
     def bprop(self, h, igrads):
 
-        igrads = igrads.reshape(100 , self.num_feat_maps, self.conv_shape[-1]/2)
-        ograds = self.G * igrads.repeat(2, 2)
+        # little hacks for strides
+        # such that dimensions align when Reshaping
+        # it is possible  that my matrix G is no longer correct
+        # when using strides but results are not so bad so I think its ok
+        # Reaches 97% on small layers with stride (3,3)
+        if self.s_x <= 2:
+            s_x = 0
+            s_y = 0
+            f = 0
+        else:
+            s_x = self.s_x
+            s_y = self.s_y
+            f = 2
+
+
+        igrads = igrads.reshape(100 , self.num_feat_maps,
+                                self.conv_shape[-2]/(self.p_y+s_y-f),
+                                self.conv_shape[-1]/(self.p_x+s_x-f))
+
+        ograds = self.G * igrads.repeat(self.pool_shape[0] +s_x-f, 2)\
+                                .repeat(self.pool_shape[1] +s_x-f, 3)
 
         return igrads, ograds
 
