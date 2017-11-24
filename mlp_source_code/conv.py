@@ -464,9 +464,87 @@ class ConvRelu_Opt(ConvLinear_Opt):
 
     def get_name(self):
         return 'ConvRelu'
+
+class ConvMaxPool2D(Layer):
+    # To be set by fprop
+    G = None
+
+    def __init__(self,
+                 num_feat_maps,
+                 conv_shape,
+                 pool_shape=(2, 2),
+                 pool_stride=(2, 2)):
+        """
+
+        :param conv_shape: tuple, a shape of the lower convolutional feature maps output
+        :param pool_shape: tuple, a shape of pooling operator
+        :param pool_stride: tuple, a strides for pooling operator
+        :return:
+        """
+
+        super(ConvMaxPool2D, self).__init__(rng=None)
+        self.num_feat_maps = num_feat_maps
+        self.conv_shape = conv_shape
+        self.pool_shape = pool_shape
+        self.p_y, self.p_x = pool_shape
+        self.pool_stride = pool_stride
+
+
+    @staticmethod
+    def vectorized_Gneration(a,indices):
+        """
+        Vectorized index bijection for 4D tensor must work on 5D
+        5D it is must test.
+        """
+        l,p,m,n,r = a.shape
+        a.reshape(-1,r)[np.arange(l*p*m*n),indices.ravel()] = 1
+
+    def fprop(self, inputs):
+        """
+        "In that blessed region of Four Dimensions,
+        shall we linger on the threshold of the Fifth, and not enter therein?"
+
+        - Flatland, Edwin Abbott.
+        """
+        p_y, p_x = self.pool_shape
+        N, nf_i, w, h = inputs.shape
+
+        N, nf_i, nh, nw = (N, nf_i, h/p_y, w/p_x)
+
+        arg = inputs.reshape(N, nf_i, nh, p_y, nw, p_x).swapaxes(3,4) .reshape(N, nf_i,-1, p_x*p_y )
+
+        O, I =  max_and_argmax(arg, axes=3)
+
+        self.G = np.zeros((N, nf_i, nh, nw, p_x*p_y))
+        self.vectorized_Gneration(self.G, I)
+        self.G = self.G.reshape(N, nf_i, nh, nw,p_y,p_x).swapaxes(3,4).reshape(N, nf_i, h, w)
+
+
+        return O.reshape(N, nf_i, nh, nw)
+
+
+    def bprop(self, h, igrads):
+
+        igrads = igrads.reshape(100 , self.num_feat_maps, self.conv_shape[-1]/2, self.conv_shape[-1]/2)
+        ograds = self.G * igrads.repeat(2, 2).repeat(2, 3)
+
+        return igrads, ograds
+
+    def get_params(self):
+        return []
+
+    def pgrads(self, inputs, deltas, **kwargs):
+        return []
+
+    def set_params(self, params):
+        pass
+
+    def get_name(self):
+        return 'convmaxpool2d'
+
     
  
-class ConvMaxPool2D(Layer):
+class ConvMaxPool2DStrides(Layer):
     # To be set by fprop
     G = None
 
