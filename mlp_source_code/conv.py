@@ -525,8 +525,9 @@ class ConvMaxPool2D(Layer):
 
     def bprop(self, h, igrads):
 
-        igrads = igrads.reshape(100 , self.num_feat_maps, self.conv_shape[-1]/2, self.conv_shape[-1]/2)
-        ograds = self.G * igrads.repeat(2, 2).repeat(2, 3)
+        igrads = igrads.reshape(self.conv_shape[0] , self.num_feat_maps, self.conv_shape[-1]/2, self.conv_shape[-1]/2)
+        ograds = self.G * igrads.repeat(self.pool_shape[0], 2)\
+                                .repeat(self.pool_shape[1], 3)
 
         return igrads, ograds
 
@@ -658,7 +659,7 @@ class ConvMaxPool2DStrides(Layer):
             f = 2
 
 
-        igrads = igrads.reshape(100 , self.num_feat_maps,
+        igrads = igrads.reshape(self.conv_shape[0] , self.num_feat_maps,
                                 self.conv_shape[-2]/(self.p_y+s_y-f),
                                 self.conv_shape[-1]/(self.p_x+s_x-f))
 
