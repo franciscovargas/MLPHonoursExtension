@@ -507,7 +507,7 @@ class ConvMaxPool2D(Layer):
         - Flatland, Edwin Abbott.
         """
         p_y, p_x = self.pool_shape
-        N, nf_i, w, h = inputs.shape
+        N, nf_i, h, w = inputs.shape
 
         N, nf_i, nh, nw = (N, nf_i, h/p_y, w/p_x)
 
@@ -525,7 +525,10 @@ class ConvMaxPool2D(Layer):
 
     def bprop(self, h, igrads):
 
-        igrads = igrads.reshape(self.conv_shape[0] , self.num_feat_maps, self.conv_shape[-1]/2, self.conv_shape[-1]/2)
+        igrads = igrads.reshape(self.conv_shape[0],
+                                self.num_feat_maps,
+                                self.conv_shape[-2] / self.p_x,
+                                self.conv_shape[-1] / self.p_y)
         ograds = self.G * igrads.repeat(self.pool_shape[0], 2)\
                                 .repeat(self.pool_shape[1], 3)
 
@@ -587,7 +590,7 @@ class ConvMaxPool2DStrides(Layer):
 
         s_y, s_x = self.stride
         p_y, p_x = self.pool_shape
-        N, nf_i, w, h = inputs.shape
+        N, nf_i, h, w = inputs.shape
         # Safety Hacks:
         input_tmp = deepcopy(inputs)
 
