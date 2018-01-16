@@ -1,4 +1,3 @@
-# TODO: rename vars like woo
 import numpy
 import logging
 from mlp.layers import Layer, Linear
