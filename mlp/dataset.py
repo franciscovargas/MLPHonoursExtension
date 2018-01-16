@@ -414,3 +414,112 @@ class FuncDataProvider(DataProvider):
         self._curr_idx += self.batch_size
 
         return x, y
+
+
+class MNISTDataProvider(DataProvider):
+    """
+    The class iterates over MNIST digits dataset, in possibly
+    random order.
+    """
+    def __init__(self, dset,
+                 batch_size=10,
+                 max_num_batches=-1,
+                 max_num_examples=-1,
+                 randomize=True,
+                 rng=None,
+                 conv_reshape=False):
+
+        super(MNISTDataProvider, self).\
+            __init__(batch_size, randomize, rng)
+
+        assert dset in ['train', 'valid', 'eval'], (
+            "Expected dset to be either 'train', "
+            "'valid' or 'eval' got %s" % dset
+        )
+        
+        assert max_num_batches != 0, (
+            "max_num_batches should be != 0"
+        )
+        
+        if max_num_batches > 0 and max_num_examples > 0:
+            logger.warning("You have specified both 'max_num_batches' and " \
+                  "a deprecead 'max_num_examples' arguments. We will " \
+                  "use the former over the latter.")
+
+        dset_path = './data/mnist_%s.pkl.gz' % dset
+        assert os.path.isfile(dset_path), (
+            "File %s was expected to exist!." % dset_path
+        )
+
+        with gzip.open(dset_path) as f:
+            x, t = cPickle.load(f)
+
+        self._max_num_batches = max_num_batches
+        #max_num_examples arg was provided for backward compatibility
+        #but it maps us to the max_num_batches anyway
+        if max_num_examples > 0 and max_num_batches < 0:
+            self._max_num_batches = max_num_examples / self.batch_size      
+            
+        self.x = x
+        self.t = t
+        self.num_classes = 10
+        self.conv_reshape = conv_reshape
+
+        self._rand_idx = None
+        if self.randomize:
+            self._rand_idx = self.__randomize()
+
+    def reset(self):
+        super(MNISTDataProvider, self).reset()
+        if self.randomize:
+            self._rand_idx = self.__randomize()
+
+    def __randomize(self):
+        assert isinstance(self.x, numpy.ndarray)
+
+        if self._rand_idx is not None and self._max_num_batches > 0:
+            return self.rng.permutation(self._rand_idx)
+        else:
+            #the max_to_present secures that random examples
+            #are returned from the same pool each time (in case
+            #the total num of examples was limited by max_num_batches)
+            max_to_present = self.batch_size*self._max_num_batches \
+                                if self._max_num_batches > 0 else self.x.shape[0]
+            return self.rng.permutation(numpy.arange(0, self.x.shape[0]))[0:max_to_present]
+
+    def next(self):
+
+        has_enough = (self._curr_idx + self.batch_size) <= self.x.shape[0]
+        presented_max = (0 < self._max_num_batches <= (self._curr_idx / self.batch_size))
+
+        if not has_enough or presented_max:
+            raise StopIteration()
+
+        if self._rand_idx is not None:
+            range_idx = \
+                self._rand_idx[self._curr_idx:self._curr_idx + self.batch_size]
+        else:
+            range_idx = \
+                numpy.arange(self._curr_idx, self._curr_idx + self.batch_size)
+
+        rval_x = self.x[range_idx]
+        rval_t = self.t[range_idx]
+
+        self._curr_idx += self.batch_size
+
+        if self.conv_reshape:
+            rval_x = rval_x.reshape(self.batch_size, 1, 28, 28)
+
+        return rval_x, self.__to_one_of_k(rval_t)
+
+    def num_examples(self):
+        return self.x.shape[0]
+
+    def num_examples_presented(self):
+        return self._curr_idx + 1
+
+    def __to_one_of_k(self, y):
+        rval = numpy.zeros((y.shape[0], self.num_classes), dtype=numpy.float32)
+        for i in xrange(y.shape[0]):
+            rval[i, y[i]] = 1
+        return rval

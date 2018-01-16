@@ -1,4 +1,4 @@
-# Francisco Vargas
+#	//check that pattern is not longer than the tex://github.com/franciscovargas/MLPHonoursExtension.githttps://github.com/franciscovargas/MLPHonoursExtension.githttps://github.com/franciscovargas/MLPHonoursExtension.githttps://github.com/franciscovargas/MLPHonoursExtension.git Francisco Vargas
 # TODO: rename vars like woo ...
 import numpy
 import logging
@@ -45,7 +45,7 @@ def my1_conv2d_tense(image, kernels, mode='fprop', strides=(1, 1)):
         k_x = kernels.shape[-2]
         k_y = kernels.shape[-1]
         image = np.pad(image,
-                       ((0,0),(k_x-1, k_x  -1),
+                       ((0,0),(0,0),(k_x-1, k_x  -1),
                        (k_y-1, k_y -1)),
                        'constant',
                        constant_values=0 )
@@ -53,70 +53,31 @@ def my1_conv2d_tense(image, kernels, mode='fprop', strides=(1, 1)):
 
 
 
-def strided_convpg(I, k, stridz=(1,1)):
-    """
-    matrix mult version tensor 1 ver
-    k tensor I tensor for pgrads
-    """
-    nf_i, h, w = I.shape
-    b, k_y, k_x = k.shape
-    ystep , xstep = stridz
-    nh, nw =((h - k_y + 1) / ystep, (w - k_x + 1) / xstep)
-
-    windows = st.as_strided(I, (nf_i, nh, nw, k_y, k_x),
-                (I.strides[-3], I.strides[-2] * ystep,
-                 I.strides[-1] * xstep, I.strides[-2], I.strides[-1]))
-
-    woo = windows.reshape(nf_i, nh, nw, k_y* k_x)
-
-    koo = k.reshape(b, -1)
-
-    dt = np.einsum('ijkl,il->ijk', woo, koo)
-
-    return dt
-
 def strided_convt(I, k, stridz=(1,1), mode='fprop'):
     """
     matrix mult version tensor 1 ver
     k tensor I tensor
     """
-    if mode=='fprop':
-        b1, nf_i, h, w = I.shape
-        b,i, k_y, k_x = k.shape
-        ystep , xstep = stridz
-        nh, nw =((h - k_y + 1) / ystep, (w - k_x + 1) / xstep)
+    
+    b1, nf_i, h, w = I.shape
+    b,i, k_y, k_x = k.shape
+    ystep , xstep = stridz
+    nh, nw =((abs(h - k_y) + 1) / ystep, (abs(w - k_x) + 1) / xstep)
 
-        # This stride bassically generates a permutation
-        # matrix which allows to do the convolution operation in a fully
-        # vectorized form. This also allows automatix striding.
-        windows = st.as_strided(I, (b1, nf_i, nh, nw, k_y, k_x),
-         (I.strides[-4],I.strides[-3], I.strides[-2] * ystep,
-          I.strides[-1] * xstep, I.strides[-2], I.strides[-1]))
+    # This stride bassically generates a permutation
+    # matrix which allows to do the convolution operation in a fully
+    # vectorized form. This also allows automatic striding.
+    windows = st.as_strided(I, (b1, nf_i, nh, nw, k_y, k_x),
+     (I.strides[-4],I.strides[-3], I.strides[-2] * ystep,
+      I.strides[-1] * xstep, I.strides[-2], I.strides[-1]))
 
-        woo = windows.reshape(b1, nf_i, nh, nw, k_y* k_x)
+    woo = windows.reshape(b1, nf_i, nh, nw, k_y* k_x)
 
-        koo = k.reshape(b, i, -1)
-
-        # Einsteins summation convention allows us to map dot products conviently
-        # within tensors in a loop like fashion
-        dt = np.einsum('ijklm,jim->ijkl', woo, koo)
-    else:
-        b1, h, w = I.shape
-        b,i, k_y, k_x = k.shape
-        ystep , xstep = stridz
-        nh, nw =((h - k_y + 1) / ystep, (w - k_x + 1) / xstep)
-
-        windows = st.as_strided(I, (b1, nh, nw, k_y, k_x),
-         (I.strides[-3], I.strides[-2] * ystep,
-          I.strides[-1] * xstep,
-          I.strides[-2], I.strides[-1]))
-
-        woo = windows.reshape(b1, nh, nw, k_y* k_x)
-
-        koo = k.reshape(b, i, -1)
-
-        dt = np.einsum('iklm,ifm->ifkl', woo, koo)
-
+    koo = k.reshape(b, i, -1)
+    print woo.shape, koo.shape
+    # Einsteins summation convention allows us to map dot products conviently
+    # within tensors in a loop like fashion
+    dt = np.einsum('ijklm,jim->ijkl', woo, koo)
     return dt
 
 
@@ -207,7 +168,7 @@ class ConvLinear_Opt(Layer):
         # My vectorization left only the channels out loop
         for k in xrange(f_out):
             w = ww[:,k,:,:] \
-                .reshape(*ww[:,k,:,:].shape).repeat(x.shape[0], axis=0) \
+                .repeat(x.shape[0], axis=0) \
                 .reshape(f_in, -1, kernel_shape[-2], kernel_shape[-1])
 
             out[:,k,:,:] = np.sum(my1_conv2d_tense(x, w, strides = self.stride,
@@ -221,16 +182,10 @@ class ConvLinear_Opt(Layer):
         image_shape = self.image_shape
         kernel_shape = self.kernel_shape
 
-        if self.stride[0] > 1:
-            igrads  = igrads.reshape(igrads.shape[0],
-                                     self.num_out_feat_maps,
-                                     self.odim/self.stride[0],
-                                     self.odim/self.stride[1])
-        else:
-            igrads  = igrads.reshape(igrads.shape[0],
-                                     self.num_out_feat_maps,
-                                     self.odim, self.odim)
-        deltas = igrads
+        
+        igrads  = igrads.reshape(igrads.shape[0],
+                                 self.num_out_feat_maps,
+                                 self.odim, self.odim)
 
         f_in = self.W.shape[0]
         f_out = self.W.shape[1]
@@ -240,31 +195,18 @@ class ConvLinear_Opt(Layer):
         ograds = np.zeros((igrads.shape[0], f_in, image_shape[0] ,
                            image_shape[1] ))
 
-        x = igrads
 
         # 180 rotation of the weight matrix
         ww = self.W[...,::-1,::-1]
+        ww = ww.swapaxes(0,1)
 
         # Again only channels out loop post vectorization
-        for k in xrange(f_out):
-            x_in = x[:,k,:,:]
-            w = ww[:,k,:,:].reshape(1,*ww[:,k,:,:].shape).repeat(x.shape[0],
-                                                                 axis=0)
-
-            # Intercalated (grid like) padding to account for the missing information
-            # due to the strides in fprop and to match up the dimensionalities post con-
-            #  volving. This came from reverse engineering the fprop since there
-            # is no clear way how to do this
-            if self.stride[0] > 1:
-                padded = np.zeros((x_in.shape[0],
-                                  x_in.shape[1]*self.stride[0],
-                                  x_in.shape[2]*self.stride[1]))
-                padded[:,0:-1:self.stride[0],0:-1:self.stride[1]] = x_in
-
-                ograds += my1_conv2d_tense(padded, w, mode='bprop')
-            else:
-                ograds += my1_conv2d_tense(x_in, w, mode='bprop')
-        return deltas, ograds
+        for k in xrange(f_in):
+            w = ww[:,k,:,:] \
+                  .repeat(igrads.shape[0], axis=0) \
+                  .reshape(f_out, -1, kernel_shape[-2], kernel_shape[-1])            
+            ograds[:,k,:,:]= my1_conv2d_tense(igrads, w, mode='bprop').sum(axis=1)
+        return igrads, ograds
 
     def bprop_cost(self, h, igrads, cost):
         raise NotImplementedError('ConvLinear.bprop_cost method not implemented')
@@ -288,18 +230,6 @@ class ConvLinear_Opt(Layer):
         since W and b are only layer's parameters
         """
 
-
-
-        l2_W_penalty, l2_b_penalty = 0, 0
-        if l2_weight > 0:
-            l2_W_penalty = l2_weight*self.W
-            l2_b_penalty = l2_weight*self.b
-
-        l1_W_penalty, l1_b_penalty = 0, 0
-        if l1_weight > 0:
-            l1_W_penalty = l1_weight*numpy.sign(self.W)
-            l1_b_penalty = l1_weight*numpy.sign(self.b)
-
         f_in = self.W.shape[0]
         f_out = self.W.shape[1]
         batch_n = deltas.shape[0]
@@ -307,32 +237,21 @@ class ConvLinear_Opt(Layer):
 
         grad_W = np.zeros((f_in, f_out, self.W.shape[2] ,
                           self.W.shape[3] ))
-        x = inputs.swapaxes(0,1)
+ 
         deltas = deltas.swapaxes(0,1)
-        for j in xrange(f_in):
-            x_in = x[j,:,:,:]
-            for k in xrange(f_out):
-                dc = deltas[k,:,:,:]
-
-                # Intercalated (grid like) padding to account for the missing information
-                # due to the strides in fprop and to match up the dimensionalities post con-
-                #  volving. This came from reverse engineering the fprop since there
-                # is no clear way how to do this
-                if self.stride[0] > 1:
-                    padded = np.zeros((dc.shape[0],
-                                       dc.shape[1]*self.stride[0],
-                                       dc.shape[2]*self.stride[1]))
-                    padded[:,0:-1:self.stride[0],0:-1:self.stride[1]] = dc
-                else:
-                    padded = dc
-                grad_W[j,k,:,:] += np.sum(strided_convpg(x_in, padded),axis=0) \
-                                       + l2_W_penalty + l1_W_penalty
+     
+        for k in xrange(f_out):
+            w = deltas[k,:,:,:]\
+                    .reshape(1, deltas.shape[1] * deltas.shape[2], deltas.shape[3])\
+                    .repeat(inputs.shape[1], axis=0) \
+                    .reshape(inputs.shape[1],-1, deltas.shape[-2], deltas.shape[-1])
+            grad_W[:,k,:,:] = my1_conv2d_tense(inputs, w).sum(axis=0)
+  
         deltas = deltas.swapaxes(0,1)
 
-        grad_b = numpy.sum(deltas, axis=0) + l2_b_penalty + l1_b_penalty
+        grad_b = numpy.sum(deltas, axis=0)
 
         return [grad_W, grad_b]
-
 
     def get_params(self):
         return [self.W, self.b]
