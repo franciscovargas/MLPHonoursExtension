@@ -1,5 +1,4 @@
-#	//check that pattern is not longer than the tex://github.com/franciscovargas/MLPHonoursExtension.githttps://github.com/franciscovargas/MLPHonoursExtension.githttps://github.com/franciscovargas/MLPHonoursExtension.githttps://github.com/franciscovargas/MLPHonoursExtension.git Francisco Vargas
-# TODO: rename vars like woo ...
+# TODO: rename vars like woo
 import numpy
 import logging
 from mlp.layers import Layer, Linear
@@ -22,63 +21,44 @@ shall we linger on the threshold of the Fifth, and not enter therein?"
 Ready your swords here be tensors.
 """
 
-def my1_conv2d_tense(image, kernels, mode='fprop', strides=(1, 1)):
-    """
-    Implements a 2d valid convolution of kernels with the image
-    Note: filer means the same as kernel and convolution (correlation) of those
-    with the input spaceproduces feature maps (sometimes refereed to also as receptive
-    fields). Also note, that feature maps are synonyms here to channels, and as such
-    num_inp_channels == num_inp_feat_maps
-    :param image: 4D tensor of sizes (batch_size, num_input_channels, img_shape_x, img_shape_y)
-    :param filters: 4D tensor of filters of size (num_inp_feat_maps, num_out_feat_maps, kernel_shape_x, kernel_shape_y)
-    :param strides: a tuple (stride_x, stride_y), specifying the shift of the kernels in x and y dimensions
-    :return: 4D tensor of size (batch_size, num_out_feature_maps, feature_map_shape_x, feature_map_shape_y)
-    """
 
-    if (mode=='fprop'):
-
-        return strided_convt(image, kernels, stridz=strides)
-    else:
-        I_n = image.shape[0]
-        I_x = image.shape[1]
-        I_y = image.shape[2]
-        k_x = kernels.shape[-2]
-        k_y = kernels.shape[-1]
-        image = np.pad(image,
-                       ((0,0),(0,0),(k_x-1, k_x  -1),
-                       (k_y-1, k_y -1)),
-                       'constant',
-                       constant_values=0 )
-        return strided_convt(image, kernels, mode='bprop')
-
-
-
-def strided_convt(I, k, stridz=(1,1), mode='fprop'):
+def vec_crosscorrelation(I, k, sum_ax=1, reshape=[], repeat_ax=0, stridz=(1,1)):
     """
     matrix mult version tensor 1 ver
     k tensor I tensor
     """
-    
-    b1, nf_i, h, w = I.shape
-    b,i, k_y, k_x = k.shape
     ystep , xstep = stridz
-    nh, nw =((abs(h - k_y) + 1) / ystep, (abs(w - k_x) + 1) / xstep)
+    out = np.zeros((I.shape[repeat_ax], k.shape[sum_ax],
+                   I.shape[-2] - k.shape[-2] + 1,
+                   I.shape[-1] - k.shape[-1] + 1))
 
-    # This stride bassically generates a permutation
+    b1, nf_i, h, w = I.shape
+    
+    nh, nw =((abs(h - k.shape[-2]) + 1) / ystep, (abs(w - k.shape[-1]) + 1) / xstep)
+
+    # as_strided bassically generates a permutation
     # matrix which allows to do the convolution operation in a fully
     # vectorized form. This also allows automatic striding.
-    windows = st.as_strided(I, (b1, nf_i, nh, nw, k_y, k_x),
-     (I.strides[-4],I.strides[-3], I.strides[-2] * ystep,
-      I.strides[-1] * xstep, I.strides[-2], I.strides[-1]))
+    windows = st.as_strided(I, (b1, nf_i, nh, nw, k.shape[-2], k.shape[-1]),
+       (I.strides[-4],I.strides[-3], I.strides[-2] * ystep,
+        I.strides[-1] * xstep, I.strides[-2], I.strides[-1]))
+    
+    windows = windows.reshape(b1, nf_i, nh, nw, k.shape[-1]* k.shape[-2]) 
+    
+    # My vectorization left only the channels out loop
+    for j in xrange(k.shape[1]):
+        k_repeat = k[:,j,:,:] \
+                    .reshape(reshape if reshape else k[:,j,:,:].shape)\
+                    .repeat(I.shape[repeat_ax], axis=0) \
+                    .reshape(I.shape[1], -1, k.shape[-2], k.shape[-1]) 
 
-    woo = windows.reshape(b1, nf_i, nh, nw, k_y* k_x)
+        k_repeat = k_repeat.reshape(k_repeat.shape[0:2] + (-1,))
 
-    koo = k.reshape(b, i, -1)
-    print woo.shape, koo.shape
-    # Einsteins summation convention allows us to map dot products conviently
-    # within tensors in a loop like fashion
-    dt = np.einsum('ijklm,jim->ijkl', woo, koo)
-    return dt
+        # Einsteins summation convention allows us to map dot products conviently
+        # within tensors in a loop like fashion
+        out[:,j,:,:] = np.einsum('ijklm,jim->ijkl', windows, k_repeat).sum(axis=sum_ax)
+ 
+    return out
 
 
 class ConvLinear_Opt(Layer):
@@ -90,9 +70,9 @@ class ConvLinear_Opt(Layer):
                  stride=(1, 1),
                  irange=0.2,
                  rng=None,
-                 conv_fwd=my1_conv2d_tense,
-                 conv_bck=my1_conv2d_tense,
-                 conv_grad=my1_conv2d_tense):
+                 conv_fwd=None,
+                 conv_bck=None,
+                 conv_grad=None):
         """
         Almost fully vectorized linear convolution:
 
@@ -142,70 +122,23 @@ class ConvLinear_Opt(Layer):
 
 
     def fprop(self, inputs):
-
-        image_shape = self.image_shape
-        kernel_shape = self.kernel_shape
-        f_in = self.W.shape[0]
-        f_out = self.W.shape[1]
-        batch_n = inputs.shape[0]
-        n_chan = inputs.shape[1]
-        sy, sx = self.stride
-
-
-        out = np.zeros((inputs.shape[0], f_out,
-                        image_shape[0] - kernel_shape[0] + 1,
-                        image_shape[1] - kernel_shape[1] + 1))
-
-        # Reshaping of outputs due to strides conditions
-        if self.stride[0] > 1:
-            out = np.zeros((inputs.shape[0], f_out,
-                           (image_shape[0] - kernel_shape[0] + 1) / sy,
-                            (image_shape[1] - kernel_shape[1] + 1 ) /  sx))
-
-        x = inputs
-        ww = self.W
-
-        # My vectorization left only the channels out loop
-        for k in xrange(f_out):
-            w = ww[:,k,:,:] \
-                .repeat(x.shape[0], axis=0) \
-                .reshape(f_in, -1, kernel_shape[-2], kernel_shape[-1])
-
-            out[:,k,:,:] = np.sum(my1_conv2d_tense(x, w, strides = self.stride,
-                                                   mode='fprop'), axis=1)
-            out[:,k,:,:] += self.b[0,k,:,:]
-
-        return out
+        return vec_crosscorrelation(inputs, self.W) + self.b
 
     def bprop(self, h, igrads):
-
-        image_shape = self.image_shape
-        kernel_shape = self.kernel_shape
-
-        
+        wv, ww, wx , wy = self.W.shape
         igrads  = igrads.reshape(igrads.shape[0],
                                  self.num_out_feat_maps,
                                  self.odim, self.odim)
 
-        f_in = self.W.shape[0]
-        f_out = self.W.shape[1]
-        batch_n = igrads.shape[0]
-        n_chan = igrads.shape[1]
+        # 180 rotation of the weight matrix + swapaxes for backprop
+        WT = self.W[...,::-1,::-1].swapaxes(0,1)
 
-        ograds = np.zeros((igrads.shape[0], f_in, image_shape[0] ,
-                           image_shape[1] ))
-
-
-        # 180 rotation of the weight matrix
-        ww = self.W[...,::-1,::-1]
-        ww = ww.swapaxes(0,1)
-
-        # Again only channels out loop post vectorization
-        for k in xrange(f_in):
-            w = ww[:,k,:,:] \
-                  .repeat(igrads.shape[0], axis=0) \
-                  .reshape(f_out, -1, kernel_shape[-2], kernel_shape[-1])            
-            ograds[:,k,:,:]= my1_conv2d_tense(igrads, w, mode='bprop').sum(axis=1)
+        padded = np.pad(igrads,
+                        ((0,0),(0,0),(wx-1, wx  -1),
+                        (wy-1, wy -1)),
+                        'constant',
+                        constant_values=0)
+        ograds = vec_crosscorrelation(padded, WT)
         return igrads, ograds
 
     def bprop_cost(self, h, igrads, cost):
@@ -229,26 +162,10 @@ class ConvLinear_Opt(Layer):
           1) da^i/dW^i and 2) da^i/db^i
         since W and b are only layer's parameters
         """
-
-        f_in = self.W.shape[0]
-        f_out = self.W.shape[1]
-        batch_n = deltas.shape[0]
-        n_chan = deltas.shape[1]
-
-        grad_W = np.zeros((f_in, f_out, self.W.shape[2] ,
-                          self.W.shape[3] ))
- 
-        deltas = deltas.swapaxes(0,1)
-     
-        for k in xrange(f_out):
-            w = deltas[k,:,:,:]\
-                    .reshape(1, deltas.shape[1] * deltas.shape[2], deltas.shape[3])\
-                    .repeat(inputs.shape[1], axis=0) \
-                    .reshape(inputs.shape[1],-1, deltas.shape[-2], deltas.shape[-1])
-            grad_W[:,k,:,:] = my1_conv2d_tense(inputs, w).sum(axis=0)
-  
-        deltas = deltas.swapaxes(0,1)
-
+        dv, dw, dx, dy = deltas.shape
+        grad_W = vec_crosscorrelation(inputs, deltas,
+                                      reshape =(1, dw * dx, dy),
+                                      repeat_ax=1, sum_ax = 0)
         grad_b = numpy.sum(deltas, axis=0)
 
         return [grad_W, grad_b]
@@ -281,9 +198,9 @@ class ConvSigmoid_Opt(ConvLinear_Opt):
                  stride=(1, 1),
                  irange=0.2,
                  rng=None,
-                 conv_fwd=my1_conv2d_tense,
-                 conv_bck=my1_conv2d_tense,
-                 conv_grad=my1_conv2d_tense):
+                 conv_fwd=None,
+                 conv_bck=None,
+                 conv_grad=None):
         super(ConvSigmoid_Opt, self).__init__(num_inp_feat_maps,
                                               num_out_feat_maps,
                                               image_shape=image_shape,
@@ -340,9 +257,9 @@ class ConvRelu_Opt(ConvLinear_Opt):
                  stride=(1, 1),
                  irange=0.2,
                  rng=None,
-                 conv_fwd=my1_conv2d_tense,
-                 conv_bck=my1_conv2d_tense,
-                 conv_grad=my1_conv2d_tense):
+                 conv_fwd=None,
+                 conv_bck=None,
+                 conv_grad=None):
         super(ConvRelu_Opt, self).__init__(num_inp_feat_maps,
                                            num_out_feat_maps,
                                            image_shape=image_shape,
