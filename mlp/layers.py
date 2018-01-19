@@ -43,8 +43,6 @@ def max_and_argmax(x, axes=None, keepdims_max=False, keepdims_argmax=False):
 
         # rval_max_arg keeps the arg index referencing to the axis along which reduction was performed (axis=-1)
         # when keepdims_argmax is True we need to map it back to the original shape of tensor x
-        # print 'rval maxaarg', rval_argmax.ndim, rval_argmax.shape,
-        # rval_argmax
         if keepdims_argmax:
             dim = tuple([x.shape[a] for a in axes])
             rval_argmax = numpy.array([idx + numpy.unravel_index(val, dim)
@@ -95,7 +93,7 @@ class MLP(object):
             self.rng = rng
             # print "rng inherited"
 
-    def fprop(self, x, noise_up_layer=-1, noise_list=None, wrong=False):
+    def fprop(self, x, noise_up_layer=-1, noise_list=None, noise=False):
         """
 
         :param inputs: mini-batch of data-points x
@@ -106,24 +104,11 @@ class MLP(object):
             self.activations = [None]*(len(self.layers) + 1)
 
         self.activations[0] = x
-        # print "layers: >>>>" + str(len(self.activations))
-        # print "layer len: ", len(self.layers)
-        # if noise_list is not None:
-        #     print "noise stack len: ", len(noise_list)
         for i in xrange(0, len(self.layers)):
-            # print "layer : " + str(i)
-            # print "odim : " + str(self.layers[i].odim)
-            # print "idim : " + str(self.layers[i].idim)
-            # print "activation : " + str(self.activations[i].shape)
             self.activations[i+1] = self.layers[i].fprop(self.activations[i])
             if noise_up_layer != -1 and i < len(self.layers) - 1:
-                # print "Layer: ", i
-                # nomn pythonic hack prepare your ...
-                # this is moribidly obese
-                if wrong:
+                if noise:
                     self.activations[i+1] *= noise_list[i]
-                # pass
-
         return self.activations[-1]
 
     def fprop_dropout(self, x, dp_scheduler):
