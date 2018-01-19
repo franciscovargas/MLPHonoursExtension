@@ -31,7 +31,6 @@ class Optimiser(object):
 
         acc_list, nll_list = [], []
         for x, t in valid_iterator:
-            # print "what ???"
             y = model.fprop(x)
             nll_list.append(model.cost.cost(y, t))
             acc_list.append(numpy.mean(self.classification_accuracy(y, t)))
@@ -50,7 +49,6 @@ class Optimiser(object):
         acc_list, nll_list = [], []
         confidence, confusion = [] , []
         for x, t in valid_iterator:
-            # print "what ???"
             y = model.fprop(x)
             nll_list.append(model.cost.cost(y, t))
             cls_acc = self.classification_accuracy(y, t)
